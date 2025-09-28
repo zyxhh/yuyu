@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>防沉迷动感联盟 - 守护你的情感与钱包</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',
+                        secondary: '#FF7D00',
+                        neutral: '#F5F7FA',
+                        dark: '#1D2129',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .card-hover {
+                transition: all 0.3s ease;
+            }
+            .card-hover:hover {
+                transform: translateY(-5px);
+            }
+            .section-padding {
+                padding-top: clamp(3rem, 8vh, 6rem);
+                padding-bottom: clamp(3rem, 8vh, 6rem);
+            }
+        }
+    </style>
+</head>
+<body class="font-sans text-dark bg-white">
+    <!-- 导航栏 -->
+    <header id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-white/90 backdrop-blur-sm shadow-sm">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <a href="#" class="flex items-center space-x-2">
+                    <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
+                        <i class="fa fa-shield text-white text-xl"></i>
+                    </div>
+                    <span class="text-xl font-bold text-primary">防沉迷动感联盟</span>
+                </a>
+
+                <!-- 桌面导航 -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="#section1" class="text-dark hover:text-primary transition-colors font-medium">拒绝上头消费</a>
+                    <a href="#section2" class="text-dark hover:text-primary transition-colors font-medium">不当舔狗指南</a>
+                    <a href="#section3" class="text-dark hover:text-primary transition-colors font-medium">情感自护技巧</a>
+                    <a href="#test" class="text-dark hover:text-primary transition-colors font-medium">情感测试</a>
+                    <a href="#calculator" class="text-dark hover:text-primary transition-colors font-medium">冷静计算器</a>
+                </nav>
+
+                <!-- 移动端菜单按钮 -->
+                <button id="menu-toggle" class="md:hidden text-dark focus:outline-none">
+                    <i class="fa fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- 移动端导航菜单 -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <div class="container mx-auto px-4 py-3 space-y-3">
+                <a href="#section1" class="block text-dark hover:text-primary transition-colors py-2">拒绝上头消费</a>
+                <a href="#section2" class="block text-dark hover:text-primary transition-colors py-2">不当舔狗指南</a>
+                <a href="#section3" class="block text-dark hover:text-primary transition-colors py-2">情感自护技巧</a>
+                <a href="#test" class="block text-dark hover:text-primary transition-colors py-2">情感测试</a>
+                <a href="#calculator" class="block text-dark hover:text-primary transition-colors py-2">冷静计算器</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 英雄区域 -->
+    <section class="pt-32 pb-20 md:pt-40 md:pb-28 bg-gradient-to-br from-primary/5 to-secondary/5">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold leading-tight text-dark mb-6">
+                        告别情感沉迷<br>
+                        <span class="text-primary">掌控自己的人生</span>
+                    </h1>
+                    <p class="text-lg text-gray-600 mb-8 max-w-lg">
+                        我们提供实用指南和工具，帮助你避免情感陷阱，建立健康关系，理性管理消费，找回生活主动权。
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#test" class="px-6 py-3 bg-primary text-white rounded-full font-medium shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:bg-primary/90 transition-all transform hover:-translate-y-1">
+                            开始情感测试 <i class="fa fa-arrow-right ml-2"></i>
+                        </a>
+                        <a href="#calculator" class="px-6 py-3 bg-white text-primary border border-primary rounded-full font-medium hover:bg-primary/5 transition-all transform hover:-translate-y-1">
+                            使用冷静计算器
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 relative">
+                    <div class="relative z-10 rounded-2xl overflow-hidden shadow-2xl transform rotate-2 hover:rotate-0 transition-transform duration-500">
+                        <img src="https://picsum.photos/600/400" alt="人们在阳光下欢笑，象征健康的社交关系" class="w-full h-auto">
+                    </div>
+                    <div class="absolute top-10 -right-5 w-40 h-40 bg-secondary/20 rounded-full -z-10"></div>
+                    <div class="absolute -bottom-5 -left-5 w-60 h-60 bg-primary/20 rounded-full -z-10"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 拒绝上头给渣男渣女花钱板块 -->
+    <section id="section1" class="section-padding bg-white">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="inline-block px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">消费理性化</span>
+                <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-4">拒绝上头给渣男渣女花钱</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">识别情感消费陷阱，建立健康的金钱观，让每一分钱都花在值得的地方。</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 建议卡片 1 -->
+                <div class="bg-neutral rounded-xl p-6 shadow-md card-hover">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fa fa-credit-card text-primary text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">设定情感消费红线</h3>
+                    <p class="text-gray-600">提前设定为对方消费的上限，超过这个数额必须冷静24小时再决定，避免冲动消费。</p>
+                </div>
+
+                <!-- 建议卡片 2 -->
+                <div class="bg-neutral rounded-xl p-6 shadow-md card-hover">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fa fa-balance-scale text-primary text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">评估付出回报率</h3>
+                    <p class="text-gray-600">冷静思考你的金钱付出是否得到相应的情感回报，警惕单方面持续付出的关系模式。</p>
+                </div>
+
+                <!-- 建议卡片 3 -->
+                <div class="bg-neutral rounded-xl p-6 shadow-md card-hover">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fa fa-shopping-bag text-primary text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">区分需要与想要</h3>
+                    <p class="text-gray-600">对方提出的要求是基本需求还是奢侈欲望？学会辨别并合理拒绝超出能力范围的要求。</p>
+                </div>
+
+                <!-- 建议卡片 4 -->
+                <div class="bg-neutral rounded-xl p-6 shadow-md card-hover">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fa fa-book text-primary text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">建立个人财务目标</h3>
+                    <p class="text-gray-600">专注于自己的储蓄和投资计划，当为对方花钱可能影响你的目标时，学会说"不"。</p>
+                </div>
+
+                <!-- 建议卡片 5 -->
+                <div class="bg-neutral rounded-xl p-6 shadow-md card-hover">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fa fa-users text-primary text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">寻求第三方意见</h3>
+                    <p class="text-gray-600">大额消费前咨询信任的朋友或家人，他们往往能从旁观者角度给出理性建议。</p>
+                </div>
+
+                <!-- 建议卡片 6 -->
+                <div class="bg-neutral rounded-xl p-6 shadow-md card-hover">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fa fa-history text-primary text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">记录情感消费日志</h3>
+                    <p class="text-gray-600">追踪为对方花费的每一笔钱，定期回顾分析，识别可能存在的不健康消费模式。</p>
+                </div>
+            </div>
+
+            <div class="mt-12 bg-primary/5 rounded-2xl p-8 border border-primary/20">
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-2/3 mb-6 md:mb-0 md:pr-8">
+                        <h3 class="text-2xl font-bold mb-3">警惕这些情感消费陷阱</h3>
+                        <ul class="space-y-2 text-gray-600">
+                            <li class="flex items-start">
+                                <i class="fa fa-exclamation-circle text-secondary mt-1 mr-2"></i>
+                                <span>"借我点钱应急，下周就还"但从不兑现承诺</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-exclamation-circle text-secondary mt-1 mr-2"></i>
+                                <span>以"考验真心"为名义要求贵重礼物</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-exclamation-circle text-secondary mt-1 mr-2"></i>
+                                <span>频繁暗示或直接索要超出你能力范围的物品</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-exclamation-circle text-secondary mt-1 mr-2"></i>
+                                <span>只在需要花钱时才热情联系，平时态度冷淡</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="md:w-1/3">
+                        <a href="#calculator" class="inline-block w-full text-center px-6 py-3 bg-secondary text-white rounded-full font-medium shadow-lg shadow-secondary/20 hover:shadow-secondary/30 hover:bg-secondary/90 transition-all">
+                            用冷静计算器评估 <i class="fa fa-calculator ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 不当舔狗指南板块 -->
+    <section id="section2" class="section-padding bg-neutral">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="inline-block px-3 py-1 bg-secondary/10 text-secondary rounded-full text-sm font-medium mb-4">关系健康化</span>
+                <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-4">不当舔狗指南</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">保持自尊自爱，建立平等互惠的人际关系，告别单方面付出的不健康模式。</p>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-10">
+                <div class="lg:w-1/2">
+                    <div class="bg-white rounded-2xl overflow-hidden shadow-xl h-full">
+                        <img src="https://picsum.photos/600/400" alt="两个人平等交流的场景，象征健康的关系" class="w-full h-64 object-cover">
+                        <div class="p-8">
+                            <h3 class="text-2xl font-bold mb-4">健康关系的三大特征</h3>
+                            <div class="space-y-6">
+                                <div class="flex">
+                                    <div class="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mr-4">
+                                        <i class="fa fa-exchange text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-lg mb-1">互惠互利</h4>
+                                        <p class="text-gray-600">双方都有付出和收获，不是单方面的给予或索取。</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex">
+                                    <div class="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mr-4">
+                                        <i class="fa fa-bullhorn text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-lg mb-1">有效沟通</h4>
+                                        <p class="text-gray-600">能够坦诚表达需求和感受，也能倾听对方的想法。</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex">
+                                    <div class="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mr-4">
+                                        <i class="fa fa-balance-scale text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-lg mb-1">相互尊重</h4>
+                                        <p class="text-gray-600">尊重对方的边界、选择和个人空间，不试图控制或操纵。</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:w-1/2">
+                    <h3 class="text-2xl font-bold mb-6">如何避免成为舔狗？</h3>
+                    <div class="space-y-6">
+                        <!-- 指南项 1 -->
+                        <div class="bg-white p-6 rounded-xl shadow-md">
+                            <div class="flex items-center mb-3">
+                                <div class="w-8 h-8 bg-secondary/10 rounded-full flex items-center justify-center mr-3">
+                                    <span class="font-bold text-secondary">1</span>
+                                </div>
+                                <h4 class="font-bold text-lg">建立自我价值感</h4>
+                            </div>
+                            <p class="text-gray-600 pl-11">你的价值不取决于别人的认可，花时间培养自己的兴趣和能力，增强自信心。</p>
+                        </div>
+
+                        <!-- 指南项 2 -->
+                        <div class="bg-white p-6 rounded-xl shadow-md">
+                            <div class="flex items-center mb-3">
+                                <div class="w-8 h-8 bg-secondary/10 rounded-full flex items-center justify-center mr-3">
+                                    <span class="font-bold text-secondary">2</span>
+                                </div>
+                                <h4 class="font-bold text-lg">设定清晰的边界</h4>
+                            </div>
+                            <p class="text-gray-600 pl-11">明确什么可以接受，什么不能接受，勇敢地对超出边界的要求说"不"。</p>
+                        </div>
+
+                        <!-- 指南项 3 -->
+                        <div class="bg-white p-6 rounded-xl shadow-md">
+                            <div class="flex items-center mb-3">
+                                <div class="w-8 h-8 bg-secondary/10 rounded-full flex items-center justify-center mr-3">
+                                    <span class="font-bold text-secondary">3</span>
+                                </div>
+                                <h4 class="font-bold text-lg">关注对方的付出</h4>
+                            </div>
+                            <p class="text-gray-600 pl-11">注意对方是否也在关系中投入时间和精力，单方面的付出难以维持健康关系。</p>
+                        </div>
+
+                        <!-- 指南项 4 -->
+                        <div class="bg-white p-6 rounded-xl shadow-md">
+                            <div class="flex items-center mb-3">
+                                <div class="w-8 h-8 bg-secondary/10 rounded-full flex items-center justify-center mr-3">
+                                    <span class="font-bold text-secondary">4</span>
+                                </div>
+                                <h4 class="font-bold text-lg">不要急于讨好</h4>
+                            </div>
+                            <p class="text-gray-600 pl-11">放慢脚步，真正了解对方，而不是为了获得认可而立刻满足所有要求。</p>
+                        </div>
+
+                        <!-- 指南项 5 -->
+                        <div class="bg-white p-6 rounded-xl shadow-md">
+                            <div class="flex items-center mb-3">
+                                <div class="w-8 h-8 bg-secondary/10 rounded-full flex items-center justify-center mr-3">
+                                    <span class="font-bold text-secondary">5</span>
+                                </div>
+                                <h4 class="font-bold text-lg">保持多元社交</h4>
+                            </div>
+                            <p class="text-gray-600 pl-11">不要将所有注意力放在一个人身上，拥有丰富的社交圈能帮助你保持客观视角。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 情感自护技巧板块 -->
+    <section id="section3" class="section-padding bg-white">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="inline-block px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">心理建设</span>
+                <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-4">情感自护技巧</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">增强情感抵抗力，建立健康的情感边界，保护自己免受情感伤害。</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="relative">
+                    <img src="https://picsum.photos/600/400" alt="一个人在安静地阅读，象征自我成长" class="w-full h-80 object-cover rounded-2xl shadow-lg">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent rounded-2xl flex items-end">
+                        <div class="p-6 text-white">
+                            <h3 class="text-2xl font-bold mb-2">建立情感免疫系统</h3>
+                            <p>通过持续的自我成长和反思，增强应对情感挫折的能力</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <!-- 技巧卡片 1 -->
+                    <div class="bg-neutral p-6 rounded-xl shadow-md card-hover">
+                        <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                            <i class="fa fa-heart text-primary text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">情绪觉察练习</h3>
+                        <p class="text-gray-600">每天花10分钟关注自己的情绪变化，识别触发点，提前做好应对准备。</p>
+                    </div>
+
+                    <!-- 技巧卡片 2 -->
+                    <div class="bg-neutral p-6 rounded-xl shadow-md card-hover">
+                        <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                            <i class="fa fa-ban text-primary text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">学会优雅拒绝</h3>
+                        <p class="text-gray-600">不必为了取悦他人而牺牲自己的需求，礼貌而坚定地表达自己的立场。</p>
+                    </div>
+
+                    <!-- 技巧卡片 3 -->
+                    <div class="bg-neutral p-6 rounded-xl shadow-md card-hover">
+                        <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                            <i class="fa fa-clock-o text-primary text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">设置情感冷却期</h3>
+                        <p class="text-gray-600">面对强烈情绪时，给自己24小时冷静期，避免在冲动下做出重要决定。</p>
+                    </div>
+
+                    <!-- 技巧卡片 4 -->
+                    <div class="bg-neutral p-6 rounded-xl shadow-md card-hover">
+                        <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                            <i class="fa fa-shield text-primary text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">建立支持系统</h3>
+                        <p class="text-gray-600">找到可以信任的朋友或家人，在你情感脆弱时提供支持和客观建议。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 情感边界设置指南 -->
+            <div class="bg-primary/5 rounded-2xl p-8 border border-primary/20">
+                <h3 class="text-2xl font-bold mb-6 text-center">如何建立健康的情感边界？</h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-xl shadow-sm">
+                        <div class="text-center mb-4">
+                            <div class="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-2">
+                                <i class="fa fa-search text-primary text-2xl"></i>
+                            </div>
+                            <h4 class="font-bold text-lg">认识自己的需求</h4>
+                        </div>
+                        <p class="text-gray-600 text-center">了解自己在情感关系中需要什么，不需要什么，什么让你感到舒适，什么让你感到不适。</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm">
+                        <div class="text-center mb-4">
+                            <div class="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-2">
+                                <i class="fa fa-comment text-primary text-2xl"></i>
+                            </div>
+                            <h4 class="font-bold text-lg">清晰表达边界</h4>
+                        </div>
+                        <p class="text-gray-600 text-center">用平和而坚定的方式告诉对方你的边界是什么，以及越过边界会有什么后果。</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm">
+                        <div class="text-center mb-4">
+                            <div class="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-2">
+                                <i class="fa fa-refresh text-primary text-2xl"></i>
+                            </div>
+                            <h4 class="font-bold text-lg">持续维护边界</h4>
+                        </div>
+                        <p class="text-gray-600 text-center">建立边界后要坚持维护，当有人越过边界时，采取适当行动，让对方知道你是认真的。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 情感健康小测试 -->
+    <section id="test" class="section-padding bg-gradient-to-br from-secondary/5 to-primary/5">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="inline-block px-3 py-1 bg-secondary/10 text-secondary rounded-full text-sm font-medium mb-4">自我评估</span>
+                <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-4">情感健康小测试</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">通过这个简短的测试，了解你的情感健康状况，获取个性化建议。</p>
+            </div>
+
+            <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+                <div id="test-intro" class="p-8 text-center">
+                    <p class="text-lg mb-6">这个测试包含8个问题，将帮助你评估自己在情感关系中的健康程度。请根据你的实际情况选择最符合的选项。</p>
+                    <button id="start-test" class="px-8 py-3 bg-primary text-white rounded-full font-medium shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:bg-primary/90 transition-all">
+                        开始测试 <i class="fa fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+
+                <div id="test-container" class="hidden">
+                    <div class="p-6 bg-primary text-white">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold text-xl">情感健康测试</h3>
+                            <div>
+                                <span id="current-question">1</span>/<span id="total-questions">8</span>
+                            </div>
+                        </div>
+                        <div class="mt-2 h-2 bg-white/20 rounded-full overflow-hidden">
+                            <div id="progress-bar" class="h-full bg-white rounded-full" style="width: 12.5%"></div>
+                        </div>
+                    </div>
+
+                    <div id="question-container" class="p-8">
+                        <h4 id="question-text" class="text-xl font-bold mb-6">当对方没有立即回复你的消息时，你会感到焦虑不安吗？</h4>
+
+                        <div class="space-y-3" id="answers-container">
+                            <label class="block p-4 border border-gray-200 rounded-lg hover:border-primary cursor-pointer transition-colors">
+                                <input type="radio" name="question" value="1" class="mr-2"> 从不
+                            </label>
+                            <label class="block p-4 border border-gray-200 rounded-lg hover:border-primary cursor-pointer transition-colors">
+                                <input type="radio" name="question" value="2" class="mr-2"> 偶尔
+                            </label>
+                            <label class="block p-4 border border-gray-200 rounded-lg hover:border-primary cursor-pointer transition-colors">
+                                <input type="radio" name="question" value="3" class="mr-2"> 经常
+                            </label>
+                            <label class="block p-4 border border-gray-200 rounded-lg hover:border-primary cursor-pointer transition-colors">
+                                <input type="radio" name="question" value="4" class="mr-2"> 总是
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="px-8 pb-8 flex justify-between">
+                        <button id="prev-btn" class="px-6 py-2 border border-primary text-primary rounded-full font-medium hover:bg-primary/5 transition-all disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                            <i class="fa fa-arrow-left mr-2"></i> 上一题
+                        </button>
+                        <button id="next-btn" class="px-6 py-2 bg-primary text-white rounded-full font-medium shadow shadow-primary/20 hover:shadow-primary/30 hover:bg-primary/90 transition-all">
+                            下一题 <i class="fa fa-arrow-right ml-2"></i>
+                        </button>
+                        <button id="submit-btn" class="hidden px-6 py-2 bg-secondary text-white rounded-full font-medium shadow shadow-secondary/20 hover:shadow-secondary/30 hover:bg-secondary/90 transition-all">
+                            查看结果 <i class="fa fa-check ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="test-results" class="hidden p-8">
+                    <h3 class="text-2xl font-bold mb-6 text-center">你的情感健康评估结果</h3>
+
+                    <div class="mb-8 text-center">
+                        <div class="inline-flex items-center justify-center w-32 h-32 rounded-full bg-primary/10 mb-4">
+                            <span id="result-score" class="text-4xl font-bold text-primary">24</span>
+                        </div>
+                        <h4 id="result-title" class="text-xl font-bold">健康的情感状态</h4>
+                    </div>
+
+                    <div id="result-description" class="mb-8">
+                        <p class="text-gray-600 mb-4">你拥有相对健康的情感状态，能够在关系中保持自我，同时也能关心他人。你懂得设立适当的边界，不会过度依赖他人的认可。</p>
+                        <p class="text-gray-600">继续保持现有的健康习惯，在面对情感挑战时，相信你有能力做出明智的选择。</p>
+                    </div>
+
+                    <div id="result-suggestions" class="bg-neutral p-6 rounded-xl mb-8">
+                        <h4 class="font-bold text-lg mb-4">个性化建议</h4>
+                        <ul class="space-y-2 text-gray-600">
+                            <li class="flex items-start">
+                                <i class="fa fa-lightbulb-o text-secondary mt-1 mr-2"></i>
+                                <span>继续保持独立思考，不要因为他人的意见而轻易改变自己的核心价值观。</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-lightbulb-o text-secondary mt-1 mr-2"></i>
+                                <span>定期给自己留出独处的时间，反思自己的情感需求和状态。</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-lightbulb-o text-secondary mt-1 mr-2"></i>
+                                <span>在关系中保持开放的沟通，及时表达自己的感受和需求。</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="text-center">
+                        <button id="restart-test" class="px-6 py-3 bg-primary text-white rounded-full font-medium shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:bg-primary/90 transition-all">
+                            重新测试 <i class="fa fa-refresh ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 情感消费冷静计算器 -->
+    <section id="calculator" class="section-padding bg-white">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="inline-block px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">理性消费</span>
+                <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-4">情感消费冷静计算器</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">在为对方花钱前，先用这个工具算一算，看看这笔钱还有哪些其他用途。</p>
+            </div>
+
+            <div class="max-w-4xl mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                    <div class="lg:col-span-2 bg-neutral rounded-2xl p-6 shadow-md">
+                        <h3 class="text-xl font-bold mb-6">输入消费信息</h3>
+
+                        <form id="calculator-form" class="space-y-6">
+                            <div>
+                                <label for="amount" class="block text-gray-700 font-medium mb-2">消费金额 (元)</label>
+                                <input type="number" id="amount" name="amount" min="1" step="1" value="500"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                            </div>
+
+                            <div>
+                                <label for="purpose" class="block text-gray-700 font-medium mb-2">消费目的</label>
+                                <select id="purpose" name="purpose"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                                    <option value="gift">购买礼物</option>
+                                    <option value="dinner">请客吃饭</option>
+                                    <option value="travel">一起旅行</option>
+                                    <option value="loan">借钱给对方</option>
+                                    <option value="other">其他</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="relationship" class="block text-gray-700 font-medium mb-2">你们的关系</label>
+                                <select id="relationship" name="relationship"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                                    <option value="crush">暗恋/刚认识</option>
+                                    <option value="dating">正在约会</option>
+                                    <option value="partner">恋爱中</option>
+                                    <option value="marital">已婚</option>
+                                    <option value="other">其他</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="income" class="block text-gray-700 font-medium mb-2">你的月收入 (元)</label>
+                                <input type="number" id="income" name="income" min="1000" step="100" value="8000"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                            </div>
+
+                            <button type="submit" class="w-full px-6 py-3 bg-primary text-white rounded-lg font-medium shadow shadow-primary/20 hover:shadow-primary/30 hover:bg-primary/90 transition-all">
+                                计算替代方案 <i class="fa fa-calculator ml-2"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="lg:col-span-3 bg-white rounded-2xl border border-gray-200 shadow-md overflow-hidden">
+                        <div class="p-6 border-b border-gray-200">
+                            <h3 class="text-xl font-bold">这笔钱的其他用途</h3>
+                            <p class="text-gray-600 mt-1">看看这些替代方案，帮助你做出更理性的决定</p>
+                        </div>
+
+                        <div id="calculator-results" class="p-6">
+                            <div class="flex justify-between items-center mb-8">
+                                <div>
+                                    <p class="text-gray-600">你计划花费</p>
+                                    <p class="text-3xl font-bold text-primary" id="display-amount">¥500</p>
+                                </div>
+
+                                <div class="text-center">
+                                    <p class="text-gray-600">占月收入比例</p>
+                                    <p class="text-2xl font-bold text-secondary" id="income-percentage">6.25%</p>
+                                </div>
+
+                                <div class="text-right">
+                                    <p class="text-gray-600">建议冷静期</p>
+                                    <p class="text-2xl font-bold" id="cooling-period">1天</p>
+                                </div>
+                            </div>
+
+                            <div class="mb-8">
+                                <h4 class="font-bold text-lg mb-4">替代消费方案</h4>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div class="bg-neutral p-4 rounded-lg">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <span class="font-medium">个人提升</span>
+                                            <span class="text-primary font-bold">¥500</span>
+                                        </div>
+                                        <p class="text-sm text-gray-600">1门在线课程或1个月健身卡</p>
+                                    </div>
+
+                                    <div class="bg-neutral p-4 rounded-lg">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <span class="font-medium">生活改善</span>
+                                            <span class="text-primary font-bold">¥500</span>
+                                        </div>
+                                        <p class="text-sm text-gray-600">购买实用家居用品或改善饮食</p>
+                                    </div>
+
+                                    <div class="bg-neutral p-4 rounded-lg">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <span class="font-medium">储蓄投资</span>
+                                            <span class="text-primary font-bold">¥500</span>
+                                        </div>
+                                        <p class="text-sm text-gray-600">存入应急基金或进行小额投资</p>
+                                    </div>
+
+                                    <div class="bg-neutral p-4 rounded-lg">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <span class="font-medium">社交活动</span>
+                                            <span class="text-primary font-bold">¥500</span>
+                                        </div>
+                                        <p class="text-sm text-gray-600">与朋友聚会2-3次或一次短途旅行</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h4 class="font-bold text-lg mb-4">消费合理性评估</h4>
+                                <div class="bg-neutral p-5 rounded-lg">
+                                    <div class="flex items-center mb-3">
+                                        <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3">
+                                            <i class="fa fa-check text-green-500"></i>
+                                        </div>
+                                        <p id="合理性评估" class="font-medium">这笔消费在你的承受范围内</p>
+                                    </div>
+                                    <p class="text-gray-600 text-sm ml-13" id="评估详情">
+                                        500元占你月收入的6.25%，属于合理范围内的情感消费。不过，建议你考虑对方是否也在关系中投入相当的时间和金钱，确保关系的平衡性。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-white pt-16 pb-8">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <div class="flex items-center space-x-2 mb-6">
+                        <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center">
+                            <i class="fa fa-shield text-primary text-xl"></i>
+                        </div>
+                        <span class="text-xl font-bold">防沉迷动感联盟</span>
+                    </div>
+                    <p class="text-gray-400 mb-6">
+                        我们致力于帮助人们建立健康的情感关系，避免情感沉迷和非理性消费，找回生活的主动权。
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-primary transition-colors">
+                            <i class="fa fa-weixin"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-primary transition-colors">
+                            <i class="fa fa-weibo"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-primary transition-colors">
+                            <i class="fa fa-qq"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-bold mb-6">快速链接</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#section1" class="text-gray-400 hover:text-white transition-colors">拒绝上头消费</a></li>
+                        <li><a href="#section2" class="text-gray-400 hover:text-white transition-colors">不当舔狗指南</a></li>
+                        <li><a href="#section3" class="text-gray-400 hover:text-white transition-colors">情感自护技巧</a></li>
+                        <li><a href="#test" class="text-gray-400 hover:text-white transition-colors">情感健康测试</a></li>
+                        <li><a href="#calculator" class="text-gray-400 hover:text-white transition-colors">冷静计算器</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-bold mb-6">相关资源</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">情感健康文章</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">关系咨询服务</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">财务规划建议</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">社区支持小组</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">专家讲座活动</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-bold mb-6">联系我们</h4>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fa fa-envelope text-gray-400 mt-1 mr-3"></i>
+                            <span class="text-gray-400">contact@fangchenmi.com</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-phone text-gray-400 mt-1 mr-3"></i>
+                            <span class="text-gray-400">400-123-4567</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-map-marker text-gray-400 mt-1 mr-3"></i>
+                            <span class="text-gray-400">北京市朝阳区健康路88号</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 pt-8 text-center text-gray-500 text-sm">
+                <p>© 2023 防沉迷动感联盟 版权所有 | 京ICP备12345678号</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // 导航栏滚动效果
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('py-2', 'shadow');
+                navbar.classList.remove('py-4');
+            } else {
+                navbar.classList.add('py-4');
+                navbar.classList.remove('py-2', 'shadow');
+            }
+        });
+
+        // 移动端菜单切换
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                // 关闭移动菜单（如果打开）
+                document.getElementById('mobile-menu').classList.add('hidden');
+
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // 情感健康测试逻辑
+        const testQuestions = [
+            {
+                question: "当对方没有立即回复你的消息时，你会感到焦虑不安吗？",
+                answers: ["从不", "偶尔", "经常", "总是"]
+            },
+            {
+                question: "你会为了让对方开心而牺牲自己的重要需求吗？",
+                answers: ["从不", "偶尔", "经常", "总是"]
+            },
+            {
+                question: "你是否经常思考自己在关系中是否足够好？",
+                answers: ["从不", "偶尔", "经常", "总是"]
+            },
+            {
+                question: "你会因为害怕失去对方而妥协自己的原则吗？",
+                answers: ["从不", "偶尔", "经常", "总是"]
+            },
+            {
+                question: "你是否会过度分析对方说的每一句话和每一个行为？",
+                answers: ["从不", "偶尔", "经常", "总是"]
+            },
+            {
+                question: "在这段关系中，你感到自己的付出和收获是平衡的吗？",
+                answers: ["非常平衡", "比较平衡", "不太平衡", "完全不平衡"]
+            },
+            {
+                question: "你是否能够在这段关系中保持自己的兴趣和朋友圈？",
+                answers: ["完全可以", "基本可以", "不太可以", "完全不可以"]
+            },
+            {
+                question: "当你和对方产生分歧时，你是否能够表达自己的真实想法？",
+                answers: ["总是可以", "经常可以", "偶尔可以", "从不可以"]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let testScores = [];
+
+        document.getElementById('start-test').addEventListener('click', function() {
+            document.getElementById('test-intro').classList.add('hidden');
+            document.getElementById('test-container').classList.remove('hidden');
+            loadQuestion(currentQuestion);
+        });
+
+        document.getElementById('prev-btn').addEventListener('click', function() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion(currentQuestion);
+                updateNavigationButtons();
+                updateProgressBar();
+            }
+        });
+
+        document.getElementById('next-btn').addEventListener('click', function() {
+            saveAnswer();
+
+            if (currentQuestion < testQuestions.length - 1) {
+                currentQuestion++;
+                loadQuestion(currentQuestion);
+                updateNavigationButtons();
+                updateProgressBar();
+            }
+        });
+
+        document.getElementById('submit-btn').addEventListener('click', function() {
+            saveAnswer();
+            calculateResults();
+            document.getElementById('test-container').classList.add('hidden');
+            document.getElementById('test-results').classList.remove('hidden');
+        });
+
+        document.getElementById('restart-test').addEventListener('click', function() {
+            currentQuestion = 0;
+            testScores = [];
+            document.getElementById('test-results').classList.add('hidden');
+            document.getElementById('test-container').classList.remove('hidden');
+            loadQuestion(currentQuestion);
+            updateNavigationButtons();
+            updateProgressBar();
+        });
+
+        function loadQuestion(index) {
+            const question = testQuestions[index];
+            document.getElementById('question-text').textContent = question.question;
+
+            const answersContainer = document.getElementById('answers-container');
+            answersContainer.innerHTML = '';
+
+            question.answers.forEach((answer, i) => {
+                const label = document.createElement('label');
+                label.className = 'block p-4 border border-gray-200 rounded-lg hover:border-primary cursor-pointer transition-colors';
+
+                const input = document.createElement('input');
+                input.type = 'radio';
+                input.name = 'question';
+                input.value = i + 1;
+                input.className = 'mr-2';
+
+                // 如果有保存的答案，设置为选中
+                if (testScores[index] && testScores[index] == i + 1) {
+                    input.checked = true;
+                }
+
+                const span = document.createElement('span');
+                span.textContent = answer;
+
+                label.appendChild(input);
+                label.appendChild(span);
+                answersContainer.appendChild(label);
+            });
+
+            document.getElementById('current-question').textContent = index + 1;
+        }
+
+        function saveAnswer() {
+            const selectedAnswer = document.querySelector('input[name="question"]:checked');
+            if (selectedAnswer) {
+                testScores[currentQuestion] = parseInt(selectedAnswer.value);
+            }
+        }
+
+        function updateNavigationButtons() {
+            document.getElementById('prev-btn').disabled = currentQuestion === 0;
+
+            if (currentQuestion === testQuestions.length - 1) {
+                document.getElementById('next-btn').classList.add('hidden');
+                document.getElementById('submit-btn').classList.remove('hidden');
+            } else {
+                document.getElementById('next-btn').classList.remove('hidden');
+                document.getElementById('submit-btn').classList.add('hidden');
+            }
+        }
+
+        function updateProgressBar() {
+            const progress = ((currentQuestion + 1) / testQuestions.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+        }
+
+        function calculateResults() {
+            // 计算总分（注意第6和第8题需要反向计分）
+            let totalScore = 0;
+            testScores.forEach((score, index) => {
+                // 第6题和第8题（索引5和7）是反向计分
+                if (index === 5 || index === 7) {
+                    totalScore += (5 - score);
+                } else {
+                    totalScore += score;
+                }
+            });
+
+            document.getElementById('result-score').textContent = totalScore;
+
+            let title, description, suggestions;
+
+            if (totalScore <= 12) {
+                title = "优秀的情感状态";
+                description = "你的情感状态非常健康，能够在关系中保持自我，同时也能关心他人。你懂得设立适当的边界，拥有健康的自尊和自信。";
+                suggestions = `
+                    <li class="flex items-start">
+                        <i class="fa fa-lightbulb-o text-secondary mt-1 mr-2"></i>
+                        <span>继续保持现有的健康习惯，你的情感管理能力是很多人的榜样。</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fa fa-lightbulb-o text-secondary mt-1 mr-2"></i>
+                        <span>可以分享你的经验给身边有需要的朋友，帮助他们建立健康的情感观念。</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fa fa-lightbulb-o text-secondary mt-1 mr-2"></i>
+                        <span>定期反思自己的情感需求和状态，保持这种健康的平衡。</span>
+                    </li>
+                `;
+            } else if (totalScore <= 20) {
+                title = "健康的情感状态";
+                description = "你拥有相对健康的情感状态，能够在关系中保持自我，同时也能关心他人。你懂得设立适当的边界，不会过度依赖他人的认可。";
+                suggestions = `
+                    <li class="flex items-start">
+                        <i class="fa fa-lightbulb-o text-secondary mt-1 mr-2"></i>
+                        <span>继续保持独立思考，不要因为他人的意见而轻易改变自己的核心价值观。</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fa fa-lightbulb-o text-secondary mt-1 mr-2"></i>
+                        <span>定期给自己留出独处的时间，反思自己的情感需求和状态。</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fa fa-lightbulb-o text-secondary mt-1 mr-2"></i>
+                        <span>在关系中保持开放的沟通，及时表达自己的感受和需求。</span>
+                    </li>
+                `;
+            } else if (totalScore <= 28) {
+                title = "需要注意的情感状态";
+                description = "你的情感状态存在一些需要注意的地方，有时可能会在关系中失去自我，过度关注对方的反应而忽视自己的需求。";
+                suggestions = `
+                    <li class="flex items-start">
+                        <i class="fa fa-lightbulb-o text-secondary mt-1 mr-2"></i>
+                        <span>学习设立健康的边界，明确表达自己的需求和底线。</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fa fa-lightbulb-o text-secondary mt-1 mr-2"></i>
+                        <span>培养自己的兴趣爱好，不要将所有注意力都放在关系上。</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fa fa-lightbulb-o text-secondary mt-1 mr-2"></i>
+                        <span>练习自我关怀，每天花时间做一些让自己开心的事情。</span>
+                    </li>
+                `;
+            } else {
+                title = "需要改善的情感状态";
+                description = "你的情感状态存在较明显的问题，可能在关系中过度迷失自我，有较强的不安全感，容易受到他人的影响。";
+                suggestions = `
+                    <li class="flex items-start">
+                        <i class="fa fa-lightbulb-o text-secondary mt-1 mr-2"></i>
+                        <span>考虑寻求专业的心理咨询，了解自己情感模式的根源。</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fa fa-lightbulb-o text-secondary mt-1 mr-2"></i>
+                        <span>建立健康的支持系统，与信任的朋友或家人分享你的感受。</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fa fa-lightbulb-o text-secondary mt-1 mr-2"></i>
+                        <span>学习自我肯定和建立自信的技巧，增强内在的安全感。</span>
+                    </li>
+                `;
+            }
+
+            document.getElementById('result-title').textContent = title;
+            document.getElementById('result-description').innerHTML = `<p class="text-gray-600 mb-4">${description}</p>`;
+            document.getElementById('result-suggestions').innerHTML = `
+                <h4 class="font-bold text-lg mb-4">个性化建议</h4>
+                <ul class="space-y-2 text-gray-600">
+                    ${suggestions}
+                </ul>
+            `;
+        }
+
+        // 消费冷静计算器逻辑
+        document.getElementById('calculator-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const amount = parseInt(document.getElementById('amount').value);
+            const income = parseInt(document.getElementById('income').value);
+            const purpose = document.getElementById('purpose').value;
+            const relationship = document.getElementById('relationship').value;
+
+            // 计算占月收入比例
+            const percentage = ((amount / income) * 100).toFixed(2);
+
+            // 确定冷静期
+            let coolingPeriod;
+            if (amount < 500) {
+                coolingPeriod = "1天";
+            } else if (amount < 2000) {
+                coolingPeriod = "3天";
+            } else if (amount < 5000) {
+                coolingPeriod = "1周";
+            } else {
+                coolingPeriod = "2周";
+            }
+
+            // 更新显示
+            document.getElementById('display-amount').textContent = `¥${amount}`;
+            document.getElementById('income-percentage').textContent = `${percentage}%`;
+            document.getElementById('cooling-period').textContent = coolingPeriod;
+
+            // 更新替代方案
+            const alternatives = document.querySelectorAll('#calculator-results .bg-neutral');
+            alternatives.forEach(el => {
+                const priceEl = el.querySelector('.text-primary');
+                if (priceEl) {
+                    priceEl.textContent = `¥${amount}`;
+                }
+            });
+
+            // 更新合理性评估
+            let assessment, details;
+            if (percentage < 5) {
+                assessment = "这笔消费在你的承受范围内";
+                details = `${amount}元占你月收入的${percentage}%，属于合理范围内的情感消费。不过，建议你考虑对方是否也在关系中投入相当的时间和金钱，确保关系的平衡性。`;
+            } else if (percentage < 15) {
+                assessment = "这笔消费需要适当考虑";
+                details = `${amount}元占你月收入的${percentage}%，属于需要谨慎考虑的消费。建议你评估这笔消费的必要性，以及是否符合你的长期财务规划。`;
+            } else if (percentage < 30) {
+                assessment = "这笔消费可能影响你的生活质量";
+                details = `${amount}元占你月收入的${percentage}%，可能会对你的日常生活造成一定影响。强烈建议你延长冷静期，重新考虑这笔消费的必要性。`;
+            } else {
+                assessment = "这笔消费超出了你的承受能力";
+                details = `${amount}元占你月收入的${percentage}%，明显超出了合理的消费范围。从财务健康角度考虑，我们建议你放弃这笔消费，或寻找更经济的替代方案。`;
+            }
+
+            document.getElementById('合理性评估').textContent = assessment;
+            document.getElementById('评估详情').textContent = details;
+
+            // 添加计算后的动画效果
+            const resultsContainer = document.getElementById('calculator-results');
+            resultsContainer.classList.add('animate-pulse');
+            setTimeout(() => {
+                resultsContainer.classList.remove('animate-pulse');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

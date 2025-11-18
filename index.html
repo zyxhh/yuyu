@@ -3,670 +3,1274 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>宝贝专属点餐系统</title>
+    <title>壹弌老婆专属 - 浪漫点餐平台</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-
-    <!-- 配置Tailwind自定义颜色和字体 -->
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- GSAP 动画库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <!-- ScrollTrigger 插件 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+    
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primary: '#FF6B8B',    // 温柔的粉色作为主色调
-                        secondary: '#FFD166',  // 温暖的黄色作为辅助色
-                        neutral: '#F9F7F7',    // 浅灰色背景
-                        dark: '#454545',       // 深灰色文字
+                        love: {
+                            primary: '#FF6B8B',
+                            secondary: '#FF9EBB',
+                            dark: '#E63956',
+                            light: '#FFE6EF',
+                            accent: '#FFD6E0'
+                        }
                     },
                     fontFamily: {
-                        cute: ['"Comic Sans MS"', '"Marker Felt"', 'sans-serif'],
+                        love: ['Segoe UI', 'Roboto', 'sans-serif']
                     },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'heart-beat': 'heartBeat 1.5s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        },
+                        heartBeat: {
+                            '0%': { transform: 'scale(1)' },
+                            '14%': { transform: 'scale(1.1)' },
+                            '28%': { transform: 'scale(1)' },
+                            '42%': { transform: 'scale(1.15)' },
+                            '70%': { transform: 'scale(1)' }
+                        }
+                    }
                 }
             }
         }
     </script>
-
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .content-auto {
-                content-visibility: auto;
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #FFF5F8;
+            overflow-x: hidden;
+        }
+        
+        .font-dancing {
+            font-family: 'Dancing Script', cursive;
+        }
+        
+        .hero-section {
+            height: 512px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255, 107, 139, 0.8), rgba(255, 158, 187, 0.6));
+            z-index: 1;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .menu-card {
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .menu-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 107, 139, 0.2);
+        }
+        
+        .cart-drawer {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 350px;
+            height: 100vh;
+            background-color: white;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .cart-drawer.active {
+            right: 0;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+        
+        .overlay.active {
+            display: block;
+        }
+        
+        .heart-icon {
+            color: #FF6B8B;
+            animation: heartBeat 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            14% { transform: scale(1.1); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.15); }
+            70% { transform: scale(1); }
+        }
+        
+        .category-btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .category-btn::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #FF6B8B;
+            transition: width 0.3s ease;
+        }
+        
+        .category-btn:hover::after,
+        .category-btn.active::after {
+            width: 100%;
+        }
+        
+        .category-btn.active {
+            color: #FF6B8B;
+            font-weight: 600;
+        }
+        
+        .add-to-cart-btn {
+            transition: all 0.3s ease;
+            transform: translateY(10px);
+            opacity: 0;
+        }
+        
+        .menu-card:hover .add-to-cart-btn {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        
+        .quantity-btn:hover {
+            background-color: #FF6B8B;
+            color: white;
+        }
+        
+        .heart-decoration {
+            position: absolute;
+            font-size: 24px;
+            color: #FF6B8B;
+            opacity: 0.7;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #FF9EBB;
+            border-radius: 10px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #FF6B8B;
+        }
+        
+        #heartCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10000;
+        }
+        
+        .countdown-timer {
+            font-variant-numeric: tabular-nums;
+        }
+        
+        .order-confirmed {
+            animation: pop 0.5s ease-in-out;
+        }
+        
+        @keyframes pop {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .delivery-time-btn.active {
+            background-color: #FF6B8B;
+            color: white;
+        }
+        
+        .floating-heart {
+            position: absolute;
+            pointer-events: none;
+            z-index: 100;
+            animation: floatHeart 3s ease-in-out forwards;
+        }
+        
+        @keyframes floatHeart {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .cart-drawer {
+                width: 100%;
             }
-            .text-shadow {
-                text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-            }
-            .card-hover {
-                transition: all 0.3s ease;
-            }
-            .card-hover:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            
+            .hero-section {
+                height: 400px;
             }
         }
     </style>
 </head>
-<body class="bg-neutral font-cute text-dark min-h-screen flex flex-col">
-    <!-- 导航栏 -->
-    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-sm shadow-sm transition-all duration-300">
+<body>
+    <!-- 心形背景画布 -->
+    <canvas id="heartCanvas"></canvas>
+    
+    <!-- 顶部导航栏 -->
+    <nav class="bg-white shadow-md fixed w-full z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center space-x-2">
-                <i class="fa fa-cutlery text-primary text-2xl"></i>
-                <h1 class="text-xl md:text-2xl font-bold text-primary">宝贝的专属餐厅</h1>
+            <div class="flex items-center">
+                <i class="fas fa-heart heart-icon mr-2"></i>
+                <h1 class="text-xl md:text-2xl font-bold text-love-primary font-dancing">壹弌老婆专属</h1>
             </div>
-
+            
             <div class="flex items-center space-x-4">
-                <button id="cartBtn" class="relative p-2 rounded-full hover:bg-neutral transition-colors">
-                    <i class="fa fa-shopping-cart text-xl"></i>
-                    <span id="cartCount" class="absolute -top-1 -right-1 bg-secondary text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">0</span>
+                <button id="cartBtn" class="relative p-2 rounded-full hover:bg-love-light transition-colors">
+                    <i class="fas fa-shopping-bag text-love-primary text-xl"></i>
+                    <span id="cartCount" class="absolute -top-1 -right-1 bg-love-dark text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
                 </button>
-                <button id="themeToggle" class="p-2 rounded-full hover:bg-neutral transition-colors">
-                    <i class="fa fa-moon-o text-xl"></i>
+                <button id="userBtn" class="p-2 rounded-full hover:bg-love-light transition-colors">
+                    <i class="fas fa-user text-love-primary text-xl"></i>
                 </button>
             </div>
         </div>
-    </header>
-
-    <!-- 主横幅 -->
-    <section class="relative bg-gradient-to-r from-primary/90 to-primary py-12 md:py-20 overflow-hidden">
-        <div class="container mx-auto px-4 relative z-10">
-            <div class="max-w-2xl">
-                <h2 class="text-[clamp(1.8rem,5vw,3rem)] font-bold text-white leading-tight text-shadow">
-                    亲爱的，今天想吃点什么？
-                </h2>
-                <p class="text-white/90 mt-4 text-lg md:text-xl">
-                    为你准备了所有你爱吃的，随便点，我来做~
-                </p>
-                <div class="mt-8">
-                    <div class="relative max-w-md">
-                        <input type="text" placeholder="搜索想吃的美食..."
-                            class="w-full py-3 px-5 pr-12 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-secondary">
-                        <button class="absolute right-3 top-1/2 -translate-y-1/2 bg-secondary p-2 rounded-full">
-                            <i class="fa fa-search text-white"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
+    </nav>
+    
+    <!-- 英雄区域 -->
+    <section class="hero-section pt-16">
+        <div class="hero-overlay"></div>
+        <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/dd552545c8d34bb0bcdb1e6026388915~tplv-a9rns2rl98-image.image?rcl=20251118100121DF297723DB1C472329CE&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1766023293&x-signature=azqSycETH4Sb%2Bb7NrpEkxeWQYq0%3D" 
+             alt="浪漫餐厅" 
+             class="w-full h-full object-cover">
+        <div class="hero-content absolute inset-0 flex flex-col justify-center items-center text-center text-white px-4">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4 font-dancing animate-float">亲爱的，今天想吃点什么？</h1>
+            <p class="text-xl md:text-2xl mb-8 max-w-2xl">为你准备了特别的爱心餐点，每一道都充满爱意</p>
+            <a href="#menu" class="bg-love-primary hover:bg-love-dark text-white font-bold py-3 px-8 rounded-full transition-colors animate-pulse-slow flex items-center">
+                <i class="fas fa-utensils mr-2"></i> 开始点餐
+            </a>
         </div>
-
-        <!-- 装饰元素 -->
-        <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full"></div>
-        <div class="absolute right-20 top-10 w-20 h-20 bg-white/10 rounded-full"></div>
     </section>
-
-    <!-- 主内容区 -->
-    <main class="flex-grow container mx-auto px-4 py-8">
-        <!-- 分类标签 -->
-        <div class="mb-8 overflow-x-auto pb-2">
-            <div class="flex space-x-3 min-w-max">
-                <button class="category-btn bg-primary text-white px-5 py-2 rounded-full text-sm whitespace-nowrap active">
-                    全部菜品
-                </button>
-                <button class="category-btn bg-white text-dark px-5 py-2 rounded-full text-sm whitespace-nowrap hover:bg-primary/10 transition-colors">
-                    早餐
-                </button>
-                <button class="category-btn bg-white text-dark px-5 py-2 rounded-full text-sm whitespace-nowrap hover:bg-primary/10 transition-colors">
-                    主食
-                </button>
-                <button class="category-btn bg-white text-dark px-5 py-2 rounded-full text-sm whitespace-nowrap hover:bg-primary/10 transition-colors">
-                    小吃
-                </button>
-                <button class="category-btn bg-white text-dark px-5 py-2 rounded-full text-sm whitespace-nowrap hover:bg-primary/10 transition-colors">
-                    甜品
-                </button>
-                <button class="category-btn bg-white text-dark px-5 py-2 rounded-full text-sm whitespace-nowrap hover:bg-primary/10 transition-colors">
-                    饮料
-                </button>
+    
+    <!-- 菜单分类 -->
+    <section id="menu" class="container mx-auto px-4 py-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-2 text-love-primary font-dancing">爱心菜单</h2>
+        <p class="text-center text-gray-600 mb-8">每一道菜品都用心制作，只为给你最好的体验</p>
+        
+        <div class="flex justify-center mb-8 overflow-x-auto custom-scrollbar">
+            <div class="flex space-x-2 md:space-x-8">
+                <button class="category-btn active py-2 px-4 text-lg" data-category="all">全部</button>
+                <button class="category-btn py-2 px-4 text-lg" data-category="burger">汉堡</button>
+                <button class="category-btn py-2 px-4 text-lg" data-category="pizza">披萨</button>
+                <button class="category-btn py-2 px-4 text-lg" data-category="snack">小食</button>
+                <button class="category-btn py-2 px-4 text-lg" data-category="drink">饮料</button>
             </div>
         </div>
-
-        <!-- 菜品列表 -->
+        
+        <!-- 菜单卡片 -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            <!-- 菜品卡片1 -->
-            <div class="food-card bg-white rounded-2xl shadow-md overflow-hidden card-hover" data-category="主食">
-                <div class="relative h-48 overflow-hidden">
-                    <img src="https://picsum.photos/seed/food1/400/300" alt="番茄炒蛋" class="w-full h-full object-cover">
-                    <span class="absolute top-3 right-3 bg-secondary text-white text-xs px-2 py-1 rounded-full">
-                        你最爱
-                    </span>
+            <!-- 爱心汉堡 -->
+            <div class="menu-card bg-white" data-category="burger">
+                <div class="relative overflow-hidden h-48">
+                    <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/eaaf01240b4040e7a20cae87a89154ab~tplv-a9rns2rl98-image.image?rcl=20251118100121DF297723DB1C472329CE&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1766023303&x-signature=uwlZikhPX7%2BuPSOPLJB2etVNoVw%3D" 
+                         alt="爱心汉堡" 
+                         class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                    <div class="absolute top-2 right-2 bg-love-primary text-white text-xs font-bold px-2 py-1 rounded-full">
+                        招牌
+                    </div>
                 </div>
                 <div class="p-4">
-                    <div class="flex justify-between items-start">
-                        <h3 class="font-bold text-lg">番茄炒蛋</h3>
-                        <span class="text-primary font-bold">¥12</span>
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xl font-bold text-gray-800">爱心芝士汉堡</h3>
+                        <span class="text-lg font-bold text-love-primary">¥39</span>
                     </div>
-                    <p class="text-gray-500 text-sm mt-1">酸甜可口，你的最爱</p>
-                    <div class="mt-4 flex justify-between items-center">
-                        <div class="flex items-center">
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star-half-o text-secondary text-xs"></i>
-                            <span class="text-gray-500 text-xs ml-1">4.5</span>
+                    <div class="flex items-center mb-3">
+                        <div class="flex text-yellow-400 mr-1">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
                         </div>
-                        <button class="add-to-cart bg-primary text-white p-2 rounded-full text-sm hover:bg-primary/90 transition-colors"
-                            data-id="1" data-name="番茄炒蛋" data-price="12" data-img="https://picsum.photos/seed/food1/400/300">
-                            <i class="fa fa-plus mr-1"></i> 加入
-                        </button>
+                        <span class="text-xs text-gray-500">(1314)</span>
                     </div>
+                    <p class="text-gray-600 text-sm mb-4">心形芝士片，鲜嫩多汁的肉饼，搭配新鲜蔬菜，爱意满满</p>
+                    <button class="add-to-cart-btn w-full bg-love-light hover:bg-love-primary text-love-primary hover:text-white py-2 rounded-lg transition-colors flex items-center justify-center"
+                            data-id="1" 
+                            data-name="爱心芝士汉堡" 
+                            data-price="39" 
+                            data-image="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/eaaf01240b4040e7a20cae87a89154ab~tplv-a9rns2rl98-image.image?rcl=20251118100121DF297723DB1C472329CE&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1766023303&x-signature=uwlZikhPX7%2BuPSOPLJB2etVNoVw%3D">
+                        <i class="fas fa-plus mr-2"></i> 加入购物车
+                    </button>
                 </div>
             </div>
-
-            <!-- 菜品卡片2 -->
-            <div class="food-card bg-white rounded-2xl shadow-md overflow-hidden card-hover" data-category="甜品">
-                <div class="relative h-48 overflow-hidden">
-                    <img src="https://picsum.photos/seed/food2/400/300" alt="草莓蛋糕" class="w-full h-full object-cover">
-                    <span class="absolute top-3 right-3 bg-secondary text-white text-xs px-2 py-1 rounded-full">
+            
+            <!-- 爱心薯条 -->
+            <div class="menu-card bg-white" data-category="snack">
+                <div class="relative overflow-hidden h-48">
+                    <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/90f328cab34143c6a5fa1bc398837211~tplv-a9rns2rl98-image.image?rcl=20251118100121DF297723DB1C472329CE&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1766023304&x-signature=zhp9rAOEPJSOTqJ6g38vBXQ4noI%3D" 
+                         alt="爱心薯条" 
+                         class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xl font-bold text-gray-800">爱心薯条</h3>
+                        <span class="text-lg font-bold text-love-primary">¥19</span>
+                    </div>
+                    <div class="flex items-center mb-3">
+                        <div class="flex text-yellow-400 mr-1">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </div>
+                        <span class="text-xs text-gray-500">(520)</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">金黄酥脆的薯条，搭配心形番茄酱，甜蜜又美味</p>
+                    <button class="add-to-cart-btn w-full bg-love-light hover:bg-love-primary text-love-primary hover:text-white py-2 rounded-lg transition-colors flex items-center justify-center"
+                            data-id="2" 
+                            data-name="爱心薯条" 
+                            data-price="19" 
+                            data-image="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/90f328cab34143c6a5fa1bc398837211~tplv-a9rns2rl98-image.image?rcl=20251118100121DF297723DB1C472329CE&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1766023304&x-signature=zhp9rAOEPJSOTqJ6g38vBXQ4noI%3D">
+                        <i class="fas fa-plus mr-2"></i> 加入购物车
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 爱心奶昔 -->
+            <div class="menu-card bg-white" data-category="drink">
+                <div class="relative overflow-hidden h-48">
+                    <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/42cbb7e84e21407ab67ad6f5a73b3bab~tplv-a9rns2rl98-image.image?rcl=20251118100121DF297723DB1C472329CE&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1766023303&x-signature=LmkEjuKbKowvX5M0ihv8pW%2FMyI0%3D" 
+                         alt="爱心奶昔" 
+                         class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                    <div class="absolute top-2 right-2 bg-love-primary text-white text-xs font-bold px-2 py-1 rounded-full">
                         新品
-                    </span>
+                    </div>
                 </div>
                 <div class="p-4">
-                    <div class="flex justify-between items-start">
-                        <h3 class="font-bold text-lg">草莓蛋糕</h3>
-                        <span class="text-primary font-bold">¥22</span>
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xl font-bold text-gray-800">爱心草莓奶昔</h3>
+                        <span class="text-lg font-bold text-love-primary">¥29</span>
                     </div>
-                    <p class="text-gray-500 text-sm mt-1">新鲜草莓，甜而不腻</p>
-                    <div class="mt-4 flex justify-between items-center">
-                        <div class="flex items-center">
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <span class="text-gray-500 text-xs ml-1">5.0</span>
+                    <div class="flex items-center mb-3">
+                        <div class="flex text-yellow-400 mr-1">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
                         </div>
-                        <button class="add-to-cart bg-primary text-white p-2 rounded-full text-sm hover:bg-primary/90 transition-colors"
-                            data-id="2" data-name="草莓蛋糕" data-price="22" data-img="https://picsum.photos/seed/food2/400/300">
-                            <i class="fa fa-plus mr-1"></i> 加入
-                        </button>
+                        <span class="text-xs text-gray-500">(999)</span>
                     </div>
+                    <p class="text-gray-600 text-sm mb-4">新鲜草莓制作，顶部心形奶油，甜蜜丝滑的口感</p>
+                    <button class="add-to-cart-btn w-full bg-love-light hover:bg-love-primary text-love-primary hover:text-white py-2 rounded-lg transition-colors flex items-center justify-center"
+                            data-id="3" 
+                            data-name="爱心草莓奶昔" 
+                            data-price="29" 
+                            data-image="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/42cbb7e84e21407ab67ad6f5a73b3bab~tplv-a9rns2rl98-image.image?rcl=20251118100121DF297723DB1C472329CE&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1766023303&x-signature=LmkEjuKbKowvX5M0ihv8pW%2FMyI0%3D">
+                        <i class="fas fa-plus mr-2"></i> 加入购物车
+                    </button>
                 </div>
             </div>
-
-            <!-- 菜品卡片3 -->
-            <div class="food-card bg-white rounded-2xl shadow-md overflow-hidden card-hover" data-category="饮料">
-                <div class="relative h-48 overflow-hidden">
-                    <img src="https://picsum.photos/seed/food3/400/300" alt="珍珠奶茶" class="w-full h-full object-cover">
+            
+            <!-- 爱心披萨 -->
+            <div class="menu-card bg-white" data-category="pizza">
+                <div class="relative overflow-hidden h-48">
+                    <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/7e04f737157e4fc68f22e081a4a1b4fc~tplv-a9rns2rl98-image.image?rcl=20251118100121DF297723DB1C472329CE&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1766023302&x-signature=13ln0sF5IFbSNPOL%2BQLGFYf4mrA%3D" 
+                         alt="爱心披萨" 
+                         class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
                 </div>
                 <div class="p-4">
-                    <div class="flex justify-between items-start">
-                        <h3 class="font-bold text-lg">珍珠奶茶</h3>
-                        <span class="text-primary font-bold">¥15</span>
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xl font-bold text-gray-800">爱心披萨</h3>
+                        <span class="text-lg font-bold text-love-primary">¥52</span>
                     </div>
-                    <p class="text-gray-500 text-sm mt-1">Q弹珍珠，香浓奶茶</p>
-                    <div class="mt-4 flex justify-between items-center">
-                        <div class="flex items-center">
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star-o text-secondary text-xs"></i>
-                            <span class="text-gray-500 text-xs ml-1">4.0</span>
+                    <div class="flex items-center mb-3">
+                        <div class="flex text-yellow-400 mr-1">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
                         </div>
-                        <button class="add-to-cart bg-primary text-white p-2 rounded-full text-sm hover:bg-primary/90 transition-colors"
-                            data-id="3" data-name="珍珠奶茶" data-price="15" data-img="https://picsum.photos/seed/food3/400/300">
-                            <i class="fa fa-plus mr-1"></i> 加入
-                        </button>
+                        <span class="text-xs text-gray-500">(1314)</span>
                     </div>
+                    <p class="text-gray-600 text-sm mb-4">心形披萨饼，新鲜 mozzarella 奶酪，番茄和罗勒，经典玛格丽特风味</p>
+                    <button class="add-to-cart-btn w-full bg-love-light hover:bg-love-primary text-love-primary hover:text-white py-2 rounded-lg transition-colors flex items-center justify-center"
+                            data-id="4" 
+                            data-name="爱心披萨" 
+                            data-price="52" 
+                            data-image="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/7e04f737157e4fc68f22e081a4a1b4fc~tplv-a9rns2rl98-image.image?rcl=20251118100121DF297723DB1C472329CE&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1766023302&x-signature=13ln0sF5IFbSNPOL%2BQLGFYf4mrA%3D">
+                        <i class="fas fa-plus mr-2"></i> 加入购物车
+                    </button>
                 </div>
             </div>
-
-            <!-- 菜品卡片4 -->
-            <div class="food-card bg-white rounded-2xl shadow-md overflow-hidden card-hover" data-category="早餐">
-                <div class="relative h-48 overflow-hidden">
-                    <img src="https://picsum.photos/seed/food4/400/300" alt="爱心三明治" class="w-full h-full object-cover">
-                    <span class="absolute top-3 right-3 bg-secondary text-white text-xs px-2 py-1 rounded-full">
-                        你最爱
-                    </span>
+            
+            <!-- 浪漫双人餐 -->
+            <div class="menu-card bg-white" data-category="all">
+                <div class="relative overflow-hidden h-48">
+                    <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/dd552545c8d34bb0bcdb1e6026388915~tplv-a9rns2rl98-image.image?rcl=20251118100121DF297723DB1C472329CE&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1766023293&x-signature=azqSycETH4Sb%2Bb7NrpEkxeWQYq0%3D" 
+                         alt="浪漫双人餐" 
+                         class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                    <div class="absolute top-2 right-2 bg-love-dark text-white text-xs font-bold px-2 py-1 rounded-full">
+                        套餐
+                    </div>
                 </div>
                 <div class="p-4">
-                    <div class="flex justify-between items-start">
-                        <h3 class="font-bold text-lg">爱心三明治</h3>
-                        <span class="text-primary font-bold">¥8</span>
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xl font-bold text-gray-800">浪漫双人餐</h3>
+                        <span class="text-lg font-bold text-love-primary">¥131.4</span>
                     </div>
-                    <p class="text-gray-500 text-sm mt-1">营养健康，爱心形状</p>
-                    <div class="mt-4 flex justify-between items-center">
-                        <div class="flex items-center">
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star-half-o text-secondary text-xs"></i>
-                            <span class="text-gray-500 text-xs ml-1">4.5</span>
+                    <div class="flex items-center mb-3">
+                        <div class="flex text-yellow-400 mr-1">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
                         </div>
-                        <button class="add-to-cart bg-primary text-white p-2 rounded-full text-sm hover:bg-primary/90 transition-colors"
-                            data-id="4" data-name="爱心三明治" data-price="8" data-img="https://picsum.photos/seed/food4/400/300">
-                            <i class="fa fa-plus mr-1"></i> 加入
-                        </button>
+                        <span class="text-xs text-gray-500">(5200)</span>
                     </div>
+                    <p class="text-gray-600 text-sm mb-4">包含两份爱心汉堡，两份薯条，两杯奶昔，爱心披萨一份，浪漫共享</p>
+                    <button class="add-to-cart-btn w-full bg-love-light hover:bg-love-primary text-love-primary hover:text-white py-2 rounded-lg transition-colors flex items-center justify-center"
+                            data-id="5" 
+                            data-name="浪漫双人餐" 
+                            data-price="131.4" 
+                            data-image="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/dd552545c8d34bb0bcdb1e6026388915~tplv-a9rns2rl98-image.image?rcl=20251118100121DF297723DB1C472329CE&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1766023293&x-signature=azqSycETH4Sb%2Bb7NrpEkxeWQYq0%3D">
+                        <i class="fas fa-plus mr-2"></i> 加入购物车
+                    </button>
                 </div>
             </div>
-
-            <!-- 菜品卡片5 -->
-            <div class="food-card bg-white rounded-2xl shadow-md overflow-hidden card-hover" data-category="小吃">
-                <div class="relative h-48 overflow-hidden">
-                    <img src="https://picsum.photos/seed/food5/400/300" alt="薯条" class="w-full h-full object-cover">
+            
+            <!-- 爱心鸡块 -->
+            <div class="menu-card bg-white" data-category="snack">
+                <div class="relative overflow-hidden h-48 bg-love-light flex items-center justify-center">
+                    <i class="fas fa-heart text-love-primary text-6xl animate-heart-beat"></i>
                 </div>
                 <div class="p-4">
-                    <div class="flex justify-between items-start">
-                        <h3 class="font-bold text-lg">薯条</h3>
-                        <span class="text-primary font-bold">¥10</span>
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xl font-bold text-gray-800">爱心鸡块</h3>
+                        <span class="text-lg font-bold text-love-primary">¥25</span>
                     </div>
-                    <p class="text-gray-500 text-sm mt-1">金黄酥脆，外焦里嫩</p>
-                    <div class="mt-4 flex justify-between items-center">
-                        <div class="flex items-center">
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star-o text-secondary text-xs"></i>
-                            <i class="fa fa-star-o text-secondary text-xs"></i>
-                            <span class="text-gray-500 text-xs ml-1">3.0</span>
+                    <div class="flex items-center mb-3">
+                        <div class="flex text-yellow-400 mr-1">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
                         </div>
-                        <button class="add-to-cart bg-primary text-white p-2 rounded-full text-sm hover:bg-primary/90 transition-colors"
-                            data-id="5" data-name="薯条" data-price="10" data-img="https://picsum.photos/seed/food5/400/300">
-                            <i class="fa fa-plus mr-1"></i> 加入
-                        </button>
+                        <span class="text-xs text-gray-500">(365)</span>
                     </div>
+                    <p class="text-gray-600 text-sm mb-4">心形鸡块，外酥里嫩，搭配特制酱料，美味停不下来</p>
+                    <button class="add-to-cart-btn w-full bg-love-light hover:bg-love-primary text-love-primary hover:text-white py-2 rounded-lg transition-colors flex items-center justify-center"
+                            data-id="6" 
+                            data-name="爱心鸡块" 
+                            data-price="25" 
+                            data-image="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/90f328cab34143c6a5fa1bc398837211~tplv-a9rns2rl98-image.image?rcl=20251118100121DF297723DB1C472329CE&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1766023304&x-signature=zhp9rAOEPJSOTqJ6g38vBXQ4noI%3D">
+                        <i class="fas fa-plus mr-2"></i> 加入购物车
+                    </button>
                 </div>
             </div>
-
-            <!-- 菜品卡片6 -->
-            <div class="food-card bg-white rounded-2xl shadow-md overflow-hidden card-hover" data-category="主食">
-                <div class="relative h-48 overflow-hidden">
-                    <img src="https://picsum.photos/seed/food6/400/300" alt="牛肉面" class="w-full h-full object-cover">
+            
+            <!-- 爱心巧克力奶昔 -->
+            <div class="menu-card bg-white" data-category="drink">
+                <div class="relative overflow-hidden h-48 bg-love-light flex items-center justify-center">
+                    <i class="fas fa-heart text-love-primary text-6xl animate-heart-beat"></i>
                 </div>
                 <div class="p-4">
-                    <div class="flex justify-between items-start">
-                        <h3 class="font-bold text-lg">牛肉面</h3>
-                        <span class="text-primary font-bold">¥18</span>
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xl font-bold text-gray-800">爱心巧克力奶昔</h3>
+                        <span class="text-lg font-bold text-love-primary">¥32</span>
                     </div>
-                    <p class="text-gray-500 text-sm mt-1">大块牛肉，劲道面条</p>
-                    <div class="mt-4 flex justify-between items-center">
-                        <div class="flex items-center">
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star-o text-secondary text-xs"></i>
-                            <span class="text-gray-500 text-xs ml-1">4.0</span>
+                    <div class="flex items-center mb-3">
+                        <div class="flex text-yellow-400 mr-1">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
                         </div>
-                        <button class="add-to-cart bg-primary text-white p-2 rounded-full text-sm hover:bg-primary/90 transition-colors"
-                            data-id="6" data-name="牛肉面" data-price="18" data-img="https://picsum.photos/seed/food6/400/300">
-                            <i class="fa fa-plus mr-1"></i> 加入
-                        </button>
+                        <span class="text-xs text-gray-500">(777)</span>
                     </div>
+                    <p class="text-gray-600 text-sm mb-4">浓郁巧克力奶昔，顶部心形奶油，撒上可可粉，甜蜜享受</p>
+                    <button class="add-to-cart-btn w-full bg-love-light hover:bg-love-primary text-love-primary hover:text-white py-2 rounded-lg transition-colors flex items-center justify-center"
+                            data-id="7" 
+                            data-name="爱心巧克力奶昔" 
+                            data-price="32" 
+                            data-image="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/42cbb7e84e21407ab67ad6f5a73b3bab~tplv-a9rns2rl98-image.image?rcl=20251118100121DF297723DB1C472329CE&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1766023303&x-signature=LmkEjuKbKowvX5M0ihv8pW%2FMyI0%3D">
+                        <i class="fas fa-plus mr-2"></i> 加入购物车
+                    </button>
                 </div>
             </div>
-
-            <!-- 菜品卡片7 -->
-            <div class="food-card bg-white rounded-2xl shadow-md overflow-hidden card-hover" data-category="甜品">
-                <div class="relative h-48 overflow-hidden">
-                    <img src="https://picsum.photos/seed/food7/400/300" alt="巧克力冰淇淋" class="w-full h-full object-cover">
+            
+            <!-- 爱心热狗 -->
+            <div class="menu-card bg-white" data-category="snack">
+                <div class="relative overflow-hidden h-48 bg-love-light flex items-center justify-center">
+                    <i class="fas fa-heart text-love-primary text-6xl animate-heart-beat"></i>
                 </div>
                 <div class="p-4">
-                    <div class="flex justify-between items-start">
-                        <h3 class="font-bold text-lg">巧克力冰淇淋</h3>
-                        <span class="text-primary font-bold">¥16</span>
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xl font-bold text-gray-800">爱心热狗</h3>
+                        <span class="text-lg font-bold text-love-primary">¥22</span>
                     </div>
-                    <p class="text-gray-500 text-sm mt-1">丝滑浓郁，甜到心里</p>
-                    <div class="mt-4 flex justify-between items-center">
-                        <div class="flex items-center">
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star-half-o text-secondary text-xs"></i>
-                            <span class="text-gray-500 text-xs ml-1">4.5</span>
+                    <div class="flex items-center mb-3">
+                        <div class="flex text-yellow-400 mr-1">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
                         </div>
-                        <button class="add-to-cart bg-primary text-white p-2 rounded-full text-sm hover:bg-primary/90 transition-colors"
-                            data-id="7" data-name="巧克力冰淇淋" data-price="16" data-img="https://picsum.photos/seed/food7/400/300">
-                            <i class="fa fa-plus mr-1"></i> 加入
-                        </button>
+                        <span class="text-xs text-gray-500">(250)</span>
                     </div>
-                </div>
-            </div>
-
-            <!-- 菜品卡片8 -->
-            <div class="food-card bg-white rounded-2xl shadow-md overflow-hidden card-hover" data-category="饮料">
-                <div class="relative h-48 overflow-hidden">
-                    <img src="https://picsum.photos/seed/food8/400/300" alt="鲜榨橙汁" class="w-full h-full object-cover">
-                    <span class="absolute top-3 right-3 bg-secondary text-white text-xs px-2 py-1 rounded-full">
-                        健康
-                    </span>
-                </div>
-                <div class="p-4">
-                    <div class="flex justify-between items-start">
-                        <h3 class="font-bold text-lg">鲜榨橙汁</h3>
-                        <span class="text-primary font-bold">¥12</span>
-                    </div>
-                    <p class="text-gray-500 text-sm mt-1">新鲜水果，现榨现喝</p>
-                    <div class="mt-4 flex justify-between items-center">
-                        <div class="flex items-center">
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star text-secondary text-xs"></i>
-                            <i class="fa fa-star-o text-secondary text-xs"></i>
-                            <span class="text-gray-500 text-xs ml-1">4.0</span>
-                        </div>
-                        <button class="add-to-cart bg-primary text-white p-2 rounded-full text-sm hover:bg-primary/90 transition-colors"
-                            data-id="8" data-name="鲜榨橙汁" data-price="12" data-img="https://picsum.photos/seed/food8/400/300">
-                            <i class="fa fa-plus mr-1"></i> 加入
-                        </button>
-                    </div>
+                    <p class="text-gray-600 text-sm mb-4">心形香肠，搭配松软面包，特制酱料，简单美味</p>
+                    <button class="add-to-cart-btn w-full bg-love-light hover:bg-love-primary text-love-primary hover:text-white py-2 rounded-lg transition-colors flex items-center justify-center"
+                            data-id="8" 
+                            data-name="爱心热狗" 
+                            data-price="22" 
+                            data-image="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/eaaf01240b4040e7a20cae87a89154ab~tplv-a9rns2rl98-image.image?rcl=20251118100121DF297723DB1C472329CE&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1766023303&x-signature=uwlZikhPX7%2BuPSOPLJB2etVNoVw%3D">
+                        <i class="fas fa-plus mr-2"></i> 加入购物车
+                    </button>
                 </div>
             </div>
         </div>
-    </main>
-
-    <!-- 购物车侧边栏 -->
-    <div id="cartSidebar" class="fixed top-0 right-0 h-full w-full sm:w-96 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50 flex flex-col">
-        <div class="p-4 border-b flex justify-between items-center">
-            <h2 class="text-xl font-bold text-primary">购物车 <span id="sidebarCartCount">(0)</span></h2>
-            <button id="closeCart" class="p-2 hover:bg-neutral rounded-full">
-                <i class="fa fa-times text-xl"></i>
-            </button>
-        </div>
-
-        <div id="cartItems" class="flex-grow overflow-y-auto p-4">
-            <div class="text-center text-gray-500 py-10">
-                <i class="fa fa-shopping-cart text-4xl mb-3 text-gray-300"></i>
-                <p>购物车还是空的哦~</p>
-                <p class="text-sm mt-1">快去添加喜欢的美食吧</p>
+    </section>
+    
+    <!-- 购物车抽屉 -->
+    <div class="overlay" id="cartOverlay"></div>
+    <div class="cart-drawer" id="cartDrawer">
+        <div class="p-4 border-b">
+            <div class="flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-love-primary font-dancing">购物车</h2>
+                <button id="closeCartBtn" class="p-2 hover:bg-love-light rounded-full">
+                    <i class="fas fa-times text-gray-600"></i>
+                </button>
             </div>
         </div>
-
-        <div class="p-4 border-t bg-white">
-            <div class="flex justify-between mb-4">
-                <span class="font-bold">总计：</span>
-                <span id="totalPrice" class="font-bold text-primary text-xl">¥0</span>
+        
+        <div id="cartItems" class="p-4 h-[calc(100vh-280px)] overflow-y-auto custom-scrollbar">
+            <!-- 购物车为空状态 -->
+            <div id="emptyCart" class="flex flex-col items-center justify-center h-full">
+                <i class="fas fa-heart text-love-primary text-5xl mb-4 animate-heart-beat"></i>
+                <p class="text-gray-500 mb-4">购物车还是空的，快去选购美食吧！</p>
+                <button id="startShoppingBtn" class="bg-love-primary hover:bg-love-dark text-white py-2 px-6 rounded-full transition-colors">
+                    开始选购
+                </button>
             </div>
-            <button id="checkoutBtn" class="w-full bg-primary text-white py-3 rounded-lg font-bold hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                提交订单 <i class="fa fa-arrow-right ml-1"></i>
+            
+            <!-- 购物车商品列表 -->
+            <div id="cartList" class="hidden">
+                <!-- 购物车商品项会通过JavaScript动态添加 -->
+            </div>
+        </div>
+        
+        <!-- 购物车底部 -->
+        <div class="p-4 border-t bg-white sticky bottom-0">
+            <!-- 配送地址和时间 -->
+            <div id="deliveryInfo" class="mb-4 hidden">
+                <div class="flex items-center mb-2">
+                    <i class="fas fa-map-marker-alt text-love-primary mr-2"></i>
+                    <span id="selectedAddress" class="text-sm">请选择配送地址</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-clock text-love-primary mr-2"></i>
+                    <span id="selectedTime" class="text-sm">请选择配送时间</span>
+                </div>
+            </div>
+            
+            <!-- 订单确认倒计时 -->
+            <div id="countdownTimer" class="mb-4 hidden">
+                <div class="flex items-center justify-between bg-love-light p-2 rounded-lg">
+                    <span class="text-sm text-love-primary font-medium">订单确认倒计时：</span>
+                    <div class="countdown-timer text-love-primary font-bold">
+                        <span id="minutes">10</span>:<span id="seconds">00</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 价格明细 -->
+            <div class="space-y-2 mb-4">
+                <div class="flex justify-between">
+                    <span class="text-gray-600">商品总价</span>
+                    <span id="subtotal">¥0.00</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">配送费</span>
+                    <span id="deliveryFee">¥0.00</span>
+                </div>
+                <div class="flex justify-between font-bold text-lg">
+                    <span>总计</span>
+                    <span id="total">¥0.00</span>
+                </div>
+            </div>
+            
+            <!-- 结算按钮 -->
+            <button id="checkoutBtn" class="w-full bg-love-primary hover:bg-love-dark text-white py-3 rounded-lg transition-colors flex items-center justify-center disabled:bg-gray-300 disabled:cursor-not-allowed" disabled>
+                <i class="fas fa-heart mr-2"></i> 结算
             </button>
         </div>
     </div>
-
-    <!-- 遮罩层 -->
-    <div id="overlay" class="fixed inset-0 bg-black/50 z-40 hidden transition-opacity duration-300"></div>
-
-    <!-- 下单成功弹窗 -->
-    <div id="successModal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
-        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 transform transition-all scale-95 opacity-0" id="modalContent">
-            <div class="text-center">
-                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fa fa-check text-2xl text-green-500"></i>
+    
+    <!-- 地址和时间选择弹窗 -->
+    <div id="addressTimeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg w-full max-w-md mx-4">
+            <div class="p-4 border-b flex justify-between items-center">
+                <h3 class="text-xl font-bold text-love-primary font-dancing">选择配送信息</h3>
+                <button id="closeModalBtn" class="p-2 hover:bg-love-light rounded-full">
+                    <i class="fas fa-times text-gray-600"></i>
+                </button>
+            </div>
+            
+            <div class="p-4">
+                <!-- 地址选择 -->
+                <div class="mb-6">
+                    <h4 class="text-lg font-bold mb-3 text-gray-700">配送地址</h4>
+                    <div class="space-y-2">
+                        <div class="border rounded-lg p-3 cursor-pointer hover:border-love-primary transition-colors address-option active" data-address="我们的家">
+                            <div class="flex items-center">
+                                <i class="fas fa-home text-love-primary mr-3"></i>
+                                <div>
+                                    <p class="font-medium">我们的家</p>
+                                    <p class="text-sm text-gray-500">甜蜜温馨的小窝</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="border rounded-lg p-3 cursor-pointer hover:border-love-primary transition-colors address-option" data-address="老婆公司">
+                            <div class="flex items-center">
+                                <i class="fas fa-building text-love-primary mr-3"></i>
+                                <div>
+                                    <p class="font-medium">老婆公司</p>
+                                    <p class="text-sm text-gray-500">给她一个惊喜</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="border rounded-lg p-3 cursor-pointer hover:border-love-primary transition-colors address-option" data-address="约会地点">
+                            <div class="flex items-center">
+                                <i class="fas fa-map-marker-alt text-love-primary mr-3"></i>
+                                <div>
+                                    <p class="font-medium">约会地点</p>
+                                    <p class="text-sm text-gray-500">浪漫二人世界</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <h3 class="text-xl font-bold mb-2">订单提交成功！</h3>
-                <p class="text-gray-600 mb-6">亲爱的，你的美食正在准备中啦~</p>
-                <button id="closeModal" class="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/90 transition-colors">
-                    好的
+                
+                <!-- 时间选择 -->
+                <div>
+                    <h4 class="text-lg font-bold mb-3 text-gray-700">配送时间</h4>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button class="delivery-time-btn border rounded-lg p-3 text-center hover:border-love-primary transition-colors active" data-time="尽快送达">
+                            <p class="font-medium">尽快送达</p>
+                            <p class="text-sm text-gray-500">预计30分钟内</p>
+                        </button>
+                        <button class="delivery-time-btn border rounded-lg p-3 text-center hover:border-love-primary transition-colors" data-time="12:00-12:30">
+                            <p class="font-medium">12:00-12:30</p>
+                            <p class="text-sm text-gray-500">午餐时间</p>
+                        </button>
+                        <button class="delivery-time-btn border rounded-lg p-3 text-center hover:border-love-primary transition-colors" data-time="18:00-18:30">
+                            <p class="font-medium">18:00-18:30</p>
+                            <p class="text-sm text-gray-500">晚餐时间</p>
+                        </button>
+                        <button class="delivery-time-btn border rounded-lg p-3 text-center hover:border-love-primary transition-colors" data-time="20:00-20:30">
+                            <p class="font-medium">20:00-20:30</p>
+                            <p class="text-sm text-gray-500">宵夜时间</p>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-4 border-t">
+                <button id="confirmInfoBtn" class="w-full bg-love-primary hover:bg-love-dark text-white py-3 rounded-lg transition-colors">
+                    确认信息
                 </button>
             </div>
         </div>
     </div>
-
+    
+    <!-- 订单确认弹窗 -->
+    <div id="orderConfirmModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg w-full max-w-md mx-4">
+            <div class="p-6 text-center">
+                <div class="w-20 h-20 bg-love-light rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-heart text-love-primary text-4xl animate-heart-beat"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-love-primary font-dancing mb-2">订单已确认！</h3>
+                <p class="text-gray-600 mb-6">亲爱的，你的爱心餐点正在准备中，很快就会送到你手中</p>
+                
+                <div class="bg-love-light rounded-lg p-4 mb-6 text-left">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-600">订单编号</span>
+                        <span id="orderNumber" class="font-medium">LOVE-20230520</span>
+                    </div>
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-600">配送地址</span>
+                        <span id="confirmAddress" class="font-medium">我们的家</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">配送时间</span>
+                        <span id="confirmTime" class="font-medium">尽快送达</span>
+                    </div>
+                </div>
+                
+                <div class="flex space-x-4">
+                    <button id="viewOrderBtn" class="flex-1 border border-love-primary text-love-primary hover:bg-love-light py-2 rounded-lg transition-colors">
+                        查看订单
+                    </button>
+                    <button id="continueShoppingBtn" class="flex-1 bg-love-primary hover:bg-love-dark text-white py-2 rounded-lg transition-colors">
+                        继续购物
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- 页脚 -->
-    <footer class="bg-white py-6 mt-10">
-        <div class="container mx-auto px-4 text-center">
-            <p class="text-gray-500">爱你的每一天 ❤️</p>
-            <p class="text-gray-400 text-sm mt-2">为我最爱的宝贝准备的专属点餐系统</p>
+    <footer class="bg-love-primary text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <h2 class="text-2xl font-bold mb-2 font-dancing">壹弌老婆专属</h2>
+                    <p class="text-love-light">每一份餐点都充满爱意</p>
+                </div>
+                
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-love-light transition-colors">
+                        <i class="fab fa-weixin text-2xl"></i>
+                    </a>
+                    <a href="#" class="hover:text-love-light transition-colors">
+                        <i class="fab fa-weibo text-2xl"></i>
+                    </a>
+                    <a href="#" class="hover:text-love-light transition-colors">
+                        <i class="fas fa-phone-alt text-2xl"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <hr class="border-love-light my-6">
+            
+            <div class="text-center text-love-light text-sm">
+                <p>© 2025 壹弌老婆专属. 保留所有权利.</p>
+                <p class="mt-2">专为最爱的老婆打造的浪漫点餐平台</p>
+            </div>
         </div>
     </footer>
-
+    
     <script>
-        // 购物车数据
-        let cart = [];
-
-        // DOM元素
-        const cartBtn = document.getElementById('cartBtn');
-        const closeCart = document.getElementById('closeCart');
-        const cartSidebar = document.getElementById('cartSidebar');
-        const overlay = document.getElementById('overlay');
-        const cartItems = document.getElementById('cartItems');
-        const cartCount = document.getElementById('cartCount');
-        const sidebarCartCount = document.getElementById('sidebarCartCount');
-        const totalPrice = document.getElementById('totalPrice');
-        const checkoutBtn = document.getElementById('checkoutBtn');
-        const successModal = document.getElementById('successModal');
-        const modalContent = document.getElementById('modalContent');
-        const closeModal = document.getElementById('closeModal');
-        const categoryBtns = document.querySelectorAll('.category-btn');
-        const foodCards = document.querySelectorAll('.food-card');
-        const themeToggle = document.getElementById('themeToggle');
-
-        // 打开购物车
-        cartBtn.addEventListener('click', () => {
-            cartSidebar.classList.remove('translate-x-full');
-            overlay.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        });
-
-        // 关闭购物车
-        function closeCartSidebar() {
-            cartSidebar.classList.add('translate-x-full');
-            overlay.classList.add('hidden');
-            document.body.style.overflow = '';
-        }
-
-        closeCart.addEventListener('click', closeCartSidebar);
-        overlay.addEventListener('click', closeCartSidebar);
-
-        // 添加到购物车
-        document.querySelectorAll('.add-to-cart').forEach(button => {
-            button.addEventListener('click', function() {
-                const id = this.getAttribute('data-id');
-                const name = this.getAttribute('data-name');
-                const price = parseFloat(this.getAttribute('data-price'));
-                const img = this.getAttribute('data-img');
-
-                // 检查商品是否已在购物车中
-                const existingItem = cart.find(item => item.id === id);
-
-                if (existingItem) {
-                    existingItem.quantity += 1;
+        // 购物车功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 购物车数据
+            let cart = [];
+            let selectedAddress = '';
+            let selectedTime = '';
+            let countdownInterval = null;
+            
+            // DOM 元素
+            const cartBtn = document.getElementById('cartBtn');
+            const closeCartBtn = document.getElementById('closeCartBtn');
+            const cartDrawer = document.getElementById('cartDrawer');
+            const cartOverlay = document.getElementById('cartOverlay');
+            const cartItems = document.getElementById('cartItems');
+            const emptyCart = document.getElementById('emptyCart');
+            const cartList = document.getElementById('cartList');
+            const startShoppingBtn = document.getElementById('startShoppingBtn');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            const subtotalEl = document.getElementById('subtotal');
+            const deliveryFeeEl = document.getElementById('deliveryFee');
+            const totalEl = document.getElementById('total');
+            const cartCount = document.getElementById('cartCount');
+            const addressTimeModal = document.getElementById('addressTimeModal');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const confirmInfoBtn = document.getElementById('confirmInfoBtn');
+            const deliveryInfo = document.getElementById('deliveryInfo');
+            const selectedAddressEl = document.getElementById('selectedAddress');
+            const selectedTimeEl = document.getElementById('selectedTime');
+            const countdownTimer = document.getElementById('countdownTimer');
+            const minutesEl = document.getElementById('minutes');
+            const secondsEl = document.getElementById('seconds');
+            const orderConfirmModal = document.getElementById('orderConfirmModal');
+            const viewOrderBtn = document.getElementById('viewOrderBtn');
+            const continueShoppingBtn = document.getElementById('continueShoppingBtn');
+            const orderNumberEl = document.getElementById('orderNumber');
+            const confirmAddressEl = document.getElementById('confirmAddress');
+            const confirmTimeEl = document.getElementById('confirmTime');
+            const categoryBtns = document.querySelectorAll('.category-btn');
+            const menuCards = document.querySelectorAll('.menu-card');
+            const addressOptions = document.querySelectorAll('.address-option');
+            const deliveryTimeBtns = document.querySelectorAll('.delivery-time-btn');
+            
+            // 初始化心形背景
+            initHeartBackground();
+            
+            // 购物车按钮点击事件
+            cartBtn.addEventListener('click', function() {
+                cartDrawer.classList.add('active');
+                cartOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+            
+            // 关闭购物车
+            function closeCart() {
+                cartDrawer.classList.remove('active');
+                cartOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+            
+            closeCartBtn.addEventListener('click', closeCart);
+            cartOverlay.addEventListener('click', closeCart);
+            
+            // 开始购物按钮点击事件
+            startShoppingBtn.addEventListener('click', closeCart);
+            
+            // 加入购物车按钮点击事件
+            document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.dataset.id);
+                    const name = this.dataset.name;
+                    const price = parseFloat(this.dataset.price);
+                    const image = this.dataset.image;
+                    
+                    // 检查商品是否已在购物车中
+                    const existingItem = cart.find(item => item.id === id);
+                    
+                    if (existingItem) {
+                        existingItem.quantity += 1;
+                    } else {
+                        cart.push({
+                            id,
+                            name,
+                            price,
+                            image,
+                            quantity: 1
+                        });
+                    }
+                    
+                    // 更新购物车
+                    updateCart();
+                    
+                    // 添加动画效果
+                    createFloatingHeart(this);
+                });
+            });
+            
+            // 创建浮动心形
+            function createFloatingHeart(button) {
+                const heart = document.createElement('i');
+                heart.className = 'fas fa-heart text-love-primary floating-heart';
+                
+                // 获取按钮位置
+                const rect = button.getBoundingClientRect();
+                const heartSize = 24 + Math.random() * 16;
+                
+                // 设置心形初始位置和大小
+                heart.style.left = `${rect.left + rect.width / 2}px`;
+                heart.style.top = `${rect.top + window.scrollY}px`;
+                heart.style.fontSize = `${heartSize}px`;
+                
+                // 添加到页面
+                document.body.appendChild(heart);
+                
+                // 动画结束后移除
+                setTimeout(() => {
+                    heart.remove();
+                }, 3000);
+            }
+            
+            // 更新购物车
+            function updateCart() {
+                // 更新购物车数量
+                cartCount.textContent = cart.reduce((total, item) => total + item.quantity, 0);
+                
+                // 更新购物车列表
+                if (cart.length === 0) {
+                    emptyCart.classList.remove('hidden');
+                    cartList.classList.add('hidden');
+                    checkoutBtn.disabled = true;
+                    deliveryInfo.classList.add('hidden');
+                    countdownTimer.classList.add('hidden');
+                    stopCountdown();
                 } else {
-                    cart.push({
-                        id,
-                        name,
-                        price,
-                        img,
-                        quantity: 1
+                    emptyCart.classList.add('hidden');
+                    cartList.classList.remove('hidden');
+                    checkoutBtn.disabled = false;
+                    
+                    // 渲染购物车商品
+                    cartList.innerHTML = '';
+                    cart.forEach(item => {
+                        const cartItem = document.createElement('div');
+                        cartItem.className = 'flex items-center py-3 border-b';
+                        cartItem.innerHTML = `
+                            <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-lg mr-4">
+                            <div class="flex-1">
+                                <h4 class="font-medium">${item.name}</h4>
+                                <div class="flex items-center mt-1">
+                                    <button class="quantity-btn minus border" data-id="${item.id}">-</button>
+                                    <span class="mx-2">${item.quantity}</span>
+                                    <button class="quantity-btn plus border" data-id="${item.id}">+</button>
+                                    <span class="ml-auto font-bold text-love-primary">¥${(item.price * item.quantity).toFixed(2)}</span>
+                                </div>
+                            </div>
+                        `;
+                        cartList.appendChild(cartItem);
+                    });
+                    
+                    // 添加数量按钮事件
+                    document.querySelectorAll('.quantity-btn.minus').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const id = parseInt(this.dataset.id);
+                            const item = cart.find(item => item.id === id);
+                            
+                            if (item.quantity > 1) {
+                                item.quantity -= 1;
+                            } else {
+                                cart = cart.filter(item => item.id !== id);
+                            }
+                            
+                            updateCart();
+                        });
+                    });
+                    
+                    document.querySelectorAll('.quantity-btn.plus').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const id = parseInt(this.dataset.id);
+                            const item = cart.find(item => item.id === id);
+                            
+                            item.quantity += 1;
+                            updateCart();
+                        });
                     });
                 }
-
-                // 更新购物车
-                updateCart();
-
-                // 添加动画效果
-                this.innerHTML = '<i class="fa fa-check mr-1"></i> 已加';
-                setTimeout(() => {
-                    this.innerHTML = '<i class="fa fa-plus mr-1"></i> 加入';
-                }, 1000);
-
-                // 显示添加成功提示
-                showToast('已添加到购物车~');
-            });
-        });
-
-        // 更新购物车
-        function updateCart() {
-            // 计算总数量和总价
-            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
-            const total = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-
-            // 更新计数器和总价
-            cartCount.textContent = totalItems;
-            sidebarCartCount.textContent = `(${totalItems})`;
-            totalPrice.textContent = `¥${total.toFixed(2)}`;
-
-            // 启用/禁用结账按钮
-            checkoutBtn.disabled = cart.length === 0;
-
-            // 更新购物车项目
-            if (cart.length === 0) {
-                cartItems.innerHTML = `
-                    <div class="text-center text-gray-500 py-10">
-                        <i class="fa fa-shopping-cart text-4xl mb-3 text-gray-300"></i>
-                        <p>购物车还是空的哦~</p>
-                        <p class="text-sm mt-1">快去添加喜欢的美食吧</p>
-                    </div>
-                `;
-                return;
+                
+                // 更新价格
+                updatePrices();
             }
-
-            // 渲染购物车项目
-            cartItems.innerHTML = '';
-            cart.forEach(item => {
-                const itemElement = document.createElement('div');
-                itemElement.className = 'flex items-center py-3 border-b last:border-0';
-                itemElement.innerHTML = `
-                    <img src="${item.img}" alt="${item.name}" class="w-16 h-16 object-cover rounded-lg">
-                    <div class="ml-3 flex-grow">
-                        <h4 class="font-medium">${item.name}</h4>
-                        <p class="text-primary font-bold">¥${item.price.toFixed(2)}</p>
-                    </div>
-                    <div class="flex items-center">
-                        <button class="decrease-qty w-6 h-6 rounded-full bg-neutral flex items-center justify-center text-gray-600 hover:bg-gray-200" data-id="${item.id}">
-                            <i class="fa fa-minus text-xs"></i>
-                        </button>
-                        <span class="mx-3 w-6 text-center">${item.quantity}</span>
-                        <button class="increase-qty w-6 h-6 rounded-full bg-neutral flex items-center justify-center text-gray-600 hover:bg-gray-200" data-id="${item.id}">
-                            <i class="fa fa-plus text-xs"></i>
-                        </button>
-                    </div>
-                `;
-                cartItems.appendChild(itemElement);
+            
+            // 更新价格
+            function updatePrices() {
+                const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+                const deliveryFee = subtotal >= 50 ? 0 : 8;
+                const total = subtotal + deliveryFee;
+                
+                subtotalEl.textContent = `¥${subtotal.toFixed(2)}`;
+                deliveryFeeEl.textContent = `¥${deliveryFee.toFixed(2)}`;
+                totalEl.textContent = `¥${total.toFixed(2)}`;
+            }
+            
+            // 结算按钮点击事件
+            checkoutBtn.addEventListener('click', function() {
+                if (!selectedAddress || !selectedTime) {
+                    addressTimeModal.classList.remove('hidden');
+                } else {
+                    startCountdown();
+                }
             });
-
-            // 添加数量调整事件监听
-            document.querySelectorAll('.decrease-qty').forEach(button => {
-                button.addEventListener('click', function() {
-                    const id = this.getAttribute('data-id');
-                    const item = cart.find(item => item.id === id);
-
-                    if (item.quantity > 1) {
-                        item.quantity -= 1;
-                    } else {
-                        cart = cart.filter(item => item.id !== id);
+            
+            // 关闭弹窗按钮点击事件
+            closeModalBtn.addEventListener('click', function() {
+                addressTimeModal.classList.add('hidden');
+            });
+            
+            // 确认信息按钮点击事件
+            confirmInfoBtn.addEventListener('click', function() {
+                if (selectedAddress && selectedTime) {
+                    addressTimeModal.classList.add('hidden');
+                    
+                    // 显示配送信息
+                    deliveryInfo.classList.remove('hidden');
+                    selectedAddressEl.textContent = selectedAddress;
+                    selectedTimeEl.textContent = selectedTime;
+                    
+                    // 开始倒计时
+                    startCountdown();
+                } else {
+                    alert('请选择配送地址和时间');
+                }
+            });
+            
+            // 开始倒计时
+            function startCountdown() {
+                let minutes = 10;
+                let seconds = 0;
+                
+                // 显示倒计时
+                countdownTimer.classList.remove('hidden');
+                minutesEl.textContent = minutes;
+                secondsEl.textContent = seconds.toString().padStart(2, '0');
+                
+                // 清除之前的倒计时
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                }
+                
+                // 设置新的倒计时
+                countdownInterval = setInterval(() => {
+                    seconds--;
+                    
+                    if (seconds < 0) {
+                        minutes--;
+                        seconds = 59;
                     }
-
-                    updateCart();
+                    
+                    minutesEl.textContent = minutes;
+                    secondsEl.textContent = seconds.toString().padStart(2, '0');
+                    
+                    // 倒计时结束
+                    if (minutes === 0 && seconds === 0) {
+                        clearInterval(countdownInterval);
+                        confirmOrder();
+                    }
+                }, 1000);
+            }
+            
+            // 停止倒计时
+            function stopCountdown() {
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                    countdownInterval = null;
+                }
+            }
+            
+            // 确认订单
+            function confirmOrder() {
+                // 生成订单编号
+                const orderNumber = generateOrderNumber();
+                orderNumberEl.textContent = orderNumber;
+                confirmAddressEl.textContent = selectedAddress;
+                confirmTimeEl.textContent = selectedTime;
+                
+                // 显示订单确认弹窗
+                orderConfirmModal.classList.remove('hidden');
+                
+                // 清空购物车
+                cart = [];
+                updateCart();
+                
+                // 关闭购物车
+                closeCart();
+            }
+            
+            // 生成订单编号
+            function generateOrderNumber() {
+                const date = new Date();
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+                
+                return `LOVE-${year}${month}${day}${random}`;
+            }
+            
+            // 查看订单按钮点击事件
+            viewOrderBtn.addEventListener('click', function() {
+                orderConfirmModal.classList.add('hidden');
+                alert('订单详情功能即将上线，敬请期待！');
+            });
+            
+            // 继续购物按钮点击事件
+            continueShoppingBtn.addEventListener('click', function() {
+                orderConfirmModal.classList.add('hidden');
+            });
+            
+            // 分类按钮点击事件
+            categoryBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // 移除所有按钮的 active 类
+                    categoryBtns.forEach(b => b.classList.remove('active'));
+                    
+                    // 添加当前按钮的 active 类
+                    this.classList.add('active');
+                    
+                    // 获取分类
+                    const category = this.dataset.category;
+                    
+                    // 筛选菜单卡片
+                    menuCards.forEach(card => {
+                        if (category === 'all' || card.dataset.category === category) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
                 });
             });
-
-            document.querySelectorAll('.increase-qty').forEach(button => {
-                button.addEventListener('click', function() {
-                    const id = this.getAttribute('data-id');
-                    const item = cart.find(item => item.id === id);
-                    item.quantity += 1;
-                    updateCart();
+            
+            // 地址选项点击事件
+            addressOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // 移除所有选项的 active 类
+                    addressOptions.forEach(o => o.classList.remove('active'));
+                    
+                    // 添加当前选项的 active 类
+                    this.classList.add('active');
+                    
+                    // 更新选中的地址
+                    selectedAddress = this.dataset.address;
                 });
             });
-        }
-
-        // 结账
-        checkoutBtn.addEventListener('click', () => {
-            // 关闭购物车
-            closeCartSidebar();
-
-            // 显示成功弹窗
-            successModal.classList.remove('hidden');
-            setTimeout(() => {
-                modalContent.classList.remove('scale-95', 'opacity-0');
-                modalContent.classList.add('scale-100', 'opacity-100');
-            }, 10);
-
-            // 清空购物车
-            cart = [];
+            
+            // 配送时间按钮点击事件
+            deliveryTimeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // 移除所有按钮的 active 类
+                    deliveryTimeBtns.forEach(b => b.classList.remove('active'));
+                    
+                    // 添加当前按钮的 active 类
+                    this.classList.add('active');
+                    
+                    // 更新选中的时间
+                    selectedTime = this.dataset.time;
+                });
+            });
+            
+            // 初始化地址和时间选择
+            addressOptions[0].click();
+            deliveryTimeBtns[0].click();
+            
+            // 初始化心形背景
+            function initHeartBackground() {
+                // 创建 Three.js 场景
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                
+                const renderer = new THREE.WebGLRenderer({
+                    canvas: document.getElementById('heartCanvas'),
+                    alpha: true
+                });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                
+                // 创建心形几何体
+                const hearts = [];
+                
+                // 添加一些随机的心形
+                for (let i = 0; i < 10; i++) {
+                    createHeart();
+                }
+                
+                // 动画循环
+                function animate() {
+                    requestAnimationFrame(animate);
+                    
+                    // 更新心形位置
+                    hearts.forEach(heart => {
+                        heart.rotation.y += 0.01;
+                        heart.position.y += heart.userData.speed;
+                        
+                        // 如果心形超出屏幕，重置位置
+                        if (heart.position.y > 10) {
+                            resetHeart(heart);
+                        }
+                    });
+                    
+                    renderer.render(scene, camera);
+                }
+                
+                // 创建心形
+                function createHeart() {
+                    const geometry = new THREE.SphereGeometry(0.2, 32, 32);
+                    const material = new THREE.MeshBasicMaterial({
+                        color: 0xFF6B8B,
+                        transparent: true,
+                        opacity: 0.5 + Math.random() * 0.5
+                    });
+                    
+                    const heart = new THREE.Mesh(geometry, material);
+                    
+                    // 随机位置
+                    resetHeart(heart);
+                    
+                    scene.add(heart);
+                    hearts.push(heart);
+                }
+                
+                // 重置心形位置
+                function resetHeart(heart) {
+                    heart.position.x = (Math.random() - 0.5) * 20;
+                    heart.position.y = -10 - Math.random() * 10;
+                    heart.position.z = -5 - Math.random() * 10;
+                    heart.userData.speed = 0.01 + Math.random() * 0.02;
+                    heart.rotation.y = Math.random() * Math.PI * 2;
+                }
+                
+                // 窗口大小调整
+                window.addEventListener('resize', function() {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+                
+                // 开始动画
+                animate();
+            }
+            
+            // 初始化页面
             updateCart();
         });
-
-        // 关闭成功弹窗
-        closeModal.addEventListener('click', () => {
-            modalContent.classList.remove('scale-100', 'opacity-100');
-            modalContent.classList.add('scale-95', 'opacity-0');
-            setTimeout(() => {
-                successModal.classList.add('hidden');
-            }, 300);
-        });
-
-        // 分类筛选
-        categoryBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                // 更新按钮样式
-                categoryBtns.forEach(b => {
-                    b.classList.remove('bg-primary', 'text-white');
-                    b.classList.add('bg-white', 'text-dark', 'hover:bg-primary/10');
-                });
-                this.classList.remove('bg-white', 'text-dark', 'hover:bg-primary/10');
-                this.classList.add('bg-primary', 'text-white');
-
-                const category = this.textContent.trim();
-
-                // 筛选菜品
-                foodCards.forEach(card => {
-                    if (category === '全部菜品' || card.getAttribute('data-category') === category) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-            });
-        });
-
-        // 主题切换
-        themeToggle.addEventListener('click', function() {
-            const icon = this.querySelector('i');
-            if (icon.classList.contains('fa-moon-o')) {
-                icon.classList.remove('fa-moon-o');
-                icon.classList.add('fa-sun-o');
-                document.body.classList.add('dark-mode');
-                // 这里可以添加暗色模式的样式切换逻辑
-            } else {
-                icon.classList.remove('fa-sun-o');
-                icon.classList.add('fa-moon-o');
-                document.body.classList.remove('dark-mode');
-            }
-        });
-
-        // 滚动时改变导航栏样式
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('header');
-            if (window.scrollY > 50) {
-                header.classList.add('py-2', 'shadow');
-                header.classList.remove('py-3');
-            } else {
-                header.classList.add('py-3');
-                header.classList.remove('py-2', 'shadow');
-            }
-        });
-
-        // 显示提示消息
-        function showToast(message) {
-            // 创建toast元素
-            const toast = document.createElement('div');
-            toast.className = 'fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-dark text-white px-4 py-2 rounded-full shadow-lg z-50 opacity-0 transition-opacity duration-300';
-            toast.textContent = message;
-            document.body.appendChild(toast);
-
-            // 显示toast
-            setTimeout(() => {
-                toast.classList.remove('opacity-0');
-                toast.classList.add('opacity-100');
-            }, 10);
-
-            // 隐藏toast
-            setTimeout(() => {
-                toast.classList.remove('opacity-100');
-                toast.classList.add('opacity-0');
-                setTimeout(() => {
-                    document.body.removeChild(toast);
-                }, 300);
-            }, 2000);
-        }
-
-        // 初始化购物车
-        updateCart();
     </script>
 </body>
 </html>
+
